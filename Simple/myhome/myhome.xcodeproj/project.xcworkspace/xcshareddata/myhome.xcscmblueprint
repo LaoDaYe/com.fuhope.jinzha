@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6CA977209A5322125D3CB9526D703914B4CECDA8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "8A6891D59F97357B3FE4A49F961297DD8BF8929E" : 9223372036854775807,
+    "6CA977209A5322125D3CB9526D703914B4CECDA8" : 9223372036854775807,
+    "05C6E486526A287875E448BD4E7B4246C83F1B5E" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "178286EE-EB8F-43DB-8355-FB8213858C58",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "8A6891D59F97357B3FE4A49F961297DD8BF8929E" : "HomeApp\/FS\/",
+    "6CA977209A5322125D3CB9526D703914B4CECDA8" : "HomeApp\/",
+    "05C6E486526A287875E448BD4E7B4246C83F1B5E" : "emohym\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "myhome",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "myhome\/myhome.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/fuchina\/emohym.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "05C6E486526A287875E448BD4E7B4246C83F1B5E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/fudon\/esuoh.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6CA977209A5322125D3CB9526D703914B4CECDA8"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/fudon\/FuSoft.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "8A6891D59F97357B3FE4A49F961297DD8BF8929E"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+/* 
+  Localizable.strings
+  myhome
+
+  Created by FudonFuchina on 2017/10/14.
+  Copyright © 2017年 fuhope. All rights reserved.
+*/
+
+"Core password description" = "\tThe only password you need to remember, you can't find it back if you forget it, it can be any text. Your data is encrypted by it to protect security. Cannot be changed after setting. \n\t It can be used to unlock the lock screen password, gesture password, etc.\n\nPrinciple: \n\t1.Don't forget the core password \n\t 2.Don't forget the principle 1";
+
+"Import Database Description" = "If you want to import the database, stay on this page. \ n \ n import database process (sample) : found in [QQ mailbox] your database file, inside the email to download and select, select application opens 】 【 find this App in the system of box, can the database import. The \n\n database import needs to be restarted after the success of the database import. Please enter the 'core password' of the database that is imported, i.e. no longer you set up a new password, but the original password of the database.";
+
+"Transfer database message" = "The receiver clicks on the 'Receive database' to enter the page to wait";
+
+"Core password check" = "The password is already set in the database, and it is not in accordance with the password set now. Please reset it again";
+
+"Earning notice" = "Wages; A red envelope, etc.; Financial revenue (yu 'e bao, wealth management, stock, p2p or other investment income)";
+"Cost notice" = "Consumption expenditure of food and clothing, etc.; All kinds of loan liabilities and other interest expenses";
+"Receivable notice" = "The money I lent to others; The money that others owe me; I pay other people's money in advance (deposit, deposit, etc.)";
+"Cash notice" = "Cash on hand, bank card of live long deposit, balance fixed-income asset classes such as treasure (such can also be recorded in the investment, need early statistics last month interest income), mainly used as the cost of living at ordinary times";
+"Inventory notice" = "Assets such as goods that will be sold, such as goods, etc";
+"Investment notice" = "Initial investment in stock or property, investment in some financial products or bullion, virtual currency (bitcoin), etc";
+"Fixed asset notice" = "Houses, cars, some valuable visible assets, fixed assets generally depreciate";
+"Amortizable intangibles notice" = "Some of the intangible assets, such as the right to use, for a long period of time, such as more than one year, generally need to be amortized, such as some franchised contracting rights such as highways";
+"Liabilities notice" = "I owe money to other people, or money I owe to me in advance, such as borrowed money, mortgages, car loans, credit card debt, flowers, white bars, P2P loans, etc";
+"Deferred revenue notice" = "A subclass of liabilities, the money that someone paid me in advance";
+"Owner's equity notice" = "Generally, the money that family and friends support is not required to be returned. (of course, how can we not pay back?) , or new books put cash before the principal (although these before money is wage income, etc., this is to prevent the recorded in the current income leads to excessive income data distortion after), at ordinary times than regular income, such as a red envelope or roadside pick up the money";
+"Capital stock notice" = "A subclass of the principal, the simulated share capital, for the shares of the entities controlled by the parties";
+
+"Loan money" = "Money・10K";
+"Months" = "Months・M";
+"Year rate" = "Rate・%";
+
+"MakeName" = "Note";
+
+
+
+

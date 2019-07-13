@@ -1,0 +1,45 @@
+platform:ios,'9.0'
+
+target 'myhome' do
+    pod 'Bugly'
+#   pod 'MLeaksFinder'
+    pod 'YYKit'
+#   pod 'OOMDetector', '1.3'
+
+# 三方库都要指定版本，自己的库可以不要指定版本
+ 
+    pod 'FSDiary'
+    pod 'FSToDo'
+    pod 'FSCounter'
+    pod 'FSToast'
+    pod 'FSCryptor'
+    pod 'FSShare'
+    pod 'FSGesture'
+    pod 'FSBirthday'
+    pod 'FSLocation'
+    pod 'FSDBMaster','0.0.3'
+    pod 'FSTTS'
+    pod 'FSJZKit'
+
+   pod 'FSAccount'
+   pod 'FSPassword'
+   pod 'FSJZBus','1.6'
+   pod 'FSContact','1.2'
+   pod 'FSRouter'
+
+#   pod 'FSRouter',:path => '../../../github/Alpha/Components/FSRouter'
+
+#    pod 'FSPassword', :path => '../../../github/Private/FSPasswordPrivate/'
+#    pod 'FSContact', :path => '../../../github/Private/FSContactPrivate/'
+#    pod 'FSAccount', :path => '../../../github/Private/FSAccountPrivate/'
+#   pod 'FSJZBus', :path => '../../../github/Private/FSPrivateJZBus/'
+#   pod 'FSJZKit', :path => '../../../github/FSJZKit'
+#   pod 'FSTTS',:path => '../../../github/Alpha/Components/FSTTS'
+#   pod 'FSLocation',:path => '../../../github/FSLocation'
+#   pod 'FSDiary', :path => '../../../github/Private/FSDiaryPrivate/'
+#   pod 'FSToDo', :path => '../../../github/Private/FSToDoPrivate/'
+#   pod 'FSCounter', :path => '../../../github/Private/FSCounterPrivate/'
+#   pod 'FSShare', :path => '../../../github/FSShare'
+#   pod 'FSUIKit', :path => '../../../github/FSUIKit'
+
+end
