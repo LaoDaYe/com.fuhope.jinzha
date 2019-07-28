@@ -23,16 +23,18 @@ target 'myhome' do
 
    pod 'FSAccount'
    pod 'FSPassword'
-   pod 'FSJZBus','1.6'
-   pod 'FSContact','1.2'
+#   pod 'FSJZBus','1.6'
+
+#   pod 'FSContact','1.2'
    pod 'FSRouter'
+
+   pod 'FSContact', :path => '../../../Private/FSContactPrivate/'
+   pod 'FSJZBus', :path => '../../../Private/FSPrivateJZBus/'
 
 #   pod 'FSRouter',:path => '../../../github/Alpha/Components/FSRouter'
 
 #    pod 'FSPassword', :path => '../../../github/Private/FSPasswordPrivate/'
-#    pod 'FSContact', :path => '../../../github/Private/FSContactPrivate/'
 #    pod 'FSAccount', :path => '../../../github/Private/FSAccountPrivate/'
-#   pod 'FSJZBus', :path => '../../../github/Private/FSPrivateJZBus/'
 #   pod 'FSJZKit', :path => '../../../github/FSJZKit'
 #   pod 'FSTTS',:path => '../../../github/Alpha/Components/FSTTS'
 #   pod 'FSLocation',:path => '../../../github/FSLocation'
