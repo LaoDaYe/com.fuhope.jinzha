@@ -32,9 +32,8 @@ target 'myhome' do
    pod 'FSJZBus', :path => '../../../Private/FSPrivateJZBus/'
 
 #   pod 'FSRouter',:path => '../../../github/Alpha/Components/FSRouter'
-
+#   pod 'FSAccount', :path => '../../../Private/FSAccountPrivate/'
 #    pod 'FSPassword', :path => '../../../github/Private/FSPasswordPrivate/'
-#    pod 'FSAccount', :path => '../../../github/Private/FSAccountPrivate/'
 #   pod 'FSJZKit', :path => '../../../github/FSJZKit'
 #   pod 'FSTTS',:path => '../../../github/Alpha/Components/FSTTS'
 #   pod 'FSLocation',:path => '../../../github/FSLocation'
