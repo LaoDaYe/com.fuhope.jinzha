@@ -293,7 +293,7 @@
            
             NSDateComponents *c = [FSDate componentForDate:[NSDate date]];
             NSString *xl = [[NSString alloc] initWithFormat:@"%@-%@-%@\n",@(c.year),[FSKit twoChar:c.month],[FSKit twoChar:c.day]];
-            s = [[NSString alloc] initWithFormat:@"%@\n%@",xl,nl];
+            s = [[NSString alloc] initWithFormat:@"%@%@",xl,nl];
         }, ^{
             self ->_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bView.frame.origin.y + bView.frame.size.height + 50, WIDTHFC, 80)];
             self ->_timeLabel.text = s;
