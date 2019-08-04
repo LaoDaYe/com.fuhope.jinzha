@@ -51,6 +51,7 @@
 #import "FSCloundView.h"
 #import "UIView+Tap.h"
 #import "FSRouter.h"
+#import "FSPwdModel.h"
 
 @interface HAToolController ()<UIDocumentInteractionControllerDelegate>
 
@@ -768,6 +769,8 @@ static NSInteger _boardTag = 889;
     __weak typeof(self)this = self;
     FSCommonGroupController *group = [[FSCommonGroupController alloc] init];
     group.table = _tb_diary;
+    group.isSearchShow = YES;
+    group.searchPH = @"日记里的关键字";
     [self.navigationController pushViewController:group animated:YES];
     group.addData = ^ (NSString *zone,NSString *name){
         FSAddDiaryController *add = [[FSAddDiaryController alloc] init];
@@ -783,6 +786,21 @@ static NSInteger _boardTag = 889;
     group.seeData = ^(NSString *zone,NSString *name) {
         [this pushToDiary:zone name:name];
     };
+    group.searchResult = ^(NSString *text) {
+        __block NSMutableArray *results = nil;
+        _fs_dispatch_global_main_queue_async(^{
+            results = [FSDiaryAPI searchText:text password:FSCryptorSupport.localUserDefaultsCorePassword];
+        }, ^{
+            if (results.count == 0) {
+                [FSToast show:@"没有搜到数据"];
+                return;
+            }
+            FSDiaryController *diary = [[FSDiaryController alloc] init];
+            diary.isSearchMode = YES;
+            diary.searchResults = results;
+            [this.navigationController pushViewController:diary animated:YES];
+        });
+    };
 }
 
 - (void)pushToDiary:(NSString *)zone name:(NSString *)name{
@@ -793,6 +811,8 @@ static NSInteger _boardTag = 889;
 - (void)seePasswords{
     FSCommonGroupController *group = [[FSCommonGroupController alloc] init];
     group.table = _tb_password;
+    group.isSearchShow = YES;
+    group.searchPH = @"搜索关键信息";
     [self.navigationController pushViewController:group animated:YES];
     WEAKSELF(this);
     group.seeData = ^(NSString *zone,NSString *name) {
@@ -808,6 +828,23 @@ static NSInteger _boardTag = 889;
             [[NSNotificationCenter defaultCenter] postNotificationName:_Notifi_refreshZone object:nil];
             [this pushToPwdBook:bZone name:name];
         };
+    };
+    
+    group.searchResult = ^(NSString *text) {
+        __block NSMutableArray *results = nil;
+        _fs_dispatch_global_main_queue_async(^{
+            results = [FSPwdModel searchText:text password:FSCryptorSupport.localUserDefaultsCorePassword];
+        }, ^{
+            if (results.count == 0) {
+                [FSToast show:@"没有搜到数据"];
+                return;
+            }
+            FSPwdBookController *pwd = [[FSPwdBookController alloc] init];
+            pwd.isSearchMode = YES;
+            pwd.searchResults = results;
+            pwd.password = FSCryptorSupport.localUserDefaultsCorePassword;
+            [this.navigationController pushViewController:pwd animated:YES];
+        });
     };
 }
 
