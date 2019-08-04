@@ -67,6 +67,7 @@
     BOOL                _justOneTime;
     NSInteger           _delaySeconds;
     BOOL                _shouldOutput;
+    UILabel             *_timeLabel;
 }
 
 - (void)dealloc{
@@ -277,10 +278,33 @@
     FSBoardView *boardView = [[FSBoardView alloc] initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 0)];
     [self.scrollView addSubview:boardView];
     [self systemBoardView];
-    
+    [self showTimeLabel:boardView];
     _fs_dispatch_main_queue_async(^{
         [self poet];        
     });
+}
+
+- (void)showTimeLabel:(FSBoardView *)bView{
+    if (!_timeLabel) {
+        __block NSString *s = nil;
+        _fs_dispatch_global_main_queue_async(^{
+            NSArray *dateArray = [FSDate chineseCalendarForDate:[NSDate date]];
+            NSString *nl = [[NSString alloc] initWithFormat:@"农历：%@%@\n",dateArray[1],dateArray[2]];
+           
+            NSDateComponents *c = [FSDate componentForDate:[NSDate date]];
+            NSString *xl = [[NSString alloc] initWithFormat:@"%@-%@-%@\n",@(c.year),[FSKit twoChar:c.month],[FSKit twoChar:c.day]];
+            s = [[NSString alloc] initWithFormat:@"%@\n%@",xl,nl];
+        }, ^{
+            self ->_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bView.frame.origin.y + bView.frame.size.height + 50, WIDTHFC, 80)];
+            self ->_timeLabel.text = s;
+            self ->_timeLabel.textAlignment = NSTextAlignmentCenter;
+            self ->_timeLabel.font = [UIFont systemFontOfSize:14];
+            CGFloat rgb = 228 / 255.0;
+            self ->_timeLabel.textColor = [UIColor colorWithRed:rgb green:rgb blue:rgb alpha:1.0];
+            self ->_timeLabel.numberOfLines = 0;
+            [self.scrollView addSubview:self ->_timeLabel];
+        });
+    }
 }
 
 // 滑到屏幕上半部分就消失
