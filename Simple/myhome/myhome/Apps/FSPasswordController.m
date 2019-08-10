@@ -72,7 +72,6 @@ static NSString  *_Chinese_placeholder = @"人生若只如初见";
     [self.scrollView addSubview:_textField];
     
 #if TARGET_IPHONE_SIMULATOR
-
 #else
 #endif
 
