@@ -15,7 +15,7 @@ target 'myhome' do
     pod 'FSCryptor'
     pod 'FSShare'
     pod 'FSGesture'
-    pod 'FSBirthday'
+#    pod 'FSBirthday'
     pod 'FSLocation'
     pod 'FSDBMaster','0.0.3'
     pod 'FSTTS'
@@ -34,6 +34,7 @@ target 'myhome' do
    pod 'FSDiary', :path => '../../../Private/FSDiaryPrivate/'
    pod 'FSToDo', :path => '../../../Private/FSToDoPrivate/'
    pod 'FSPassword', :path => '../../../Private/FSPasswordPrivate/'
+   pod 'FSBirthday', :path => '../../../Private/FSBirthdayPrivate/'
 
 #   pod 'FSRouter',:path => '../../../github/Alpha/Components/FSRouter'
    pod 'FSAccount', :path => '../../../Private/FSAccountPrivate/'
