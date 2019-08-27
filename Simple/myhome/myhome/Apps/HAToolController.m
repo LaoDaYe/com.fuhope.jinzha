@@ -83,6 +83,9 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     UITabBar.appearance.translucent = NO;// iOS12，UITabBar跳动的bug
+    if (self.navigationController.navigationBarHidden) {
+        self.navigationController.navigationBarHidden = NO;
+    }
     
     if (!_justOneTime) {
         _justOneTime = YES;
@@ -111,6 +114,11 @@
         [[NSNotificationCenter defaultCenter] addObserverForName:@"JZChangeDelaySecondsNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             [self delaySecondsEvent];
         }];
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"HomeHandleForShowViewNotification" object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+            NSString *obj = note.object;
+            [self showFullView:obj];
+        }];
     }else{
         [UIView animateWithDuration:.3 animations:^{
             self.scrollView.contentOffset = CGPointZero;
@@ -130,6 +138,35 @@
         _shouldOutput = NO;
         [self confirmSendEmail];
     }
+}
+
+- (void)showFullView:(NSString *)value {
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 60)];
+    label.backgroundColor = FS_GreenColor;
+    label.text = value;
+    label.userInteractionEnabled = YES;
+    label.numberOfLines = 2;
+    label.textColor = UIColor.whiteColor;
+    label.textAlignment = NSTextAlignmentCenter;
+    [UIApplication.sharedApplication.delegate.window addSubview:label];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFullEvent:)];
+    [label addGestureRecognizer:tap];
+    
+    [UIView animateWithDuration:.3 animations:^{
+        label.top = self.view.frame.size.height - FS_TabBar_Height;
+    }];
+}
+
+- (void)tapFullEvent:(UITapGestureRecognizer *)tap {
+    [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"隐藏此视图" message:nil actionTitles:@[@"确定"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
+        UIView *label = tap.view;
+        [UIView animateWithDuration:.3 animations:^{
+            label.top = self.view.frame.size.height;
+        } completion:^(BOOL finished) {
+            [label removeFromSuperview];
+        }];
+    }];
 }
 
 - (void)shouldOutput{
