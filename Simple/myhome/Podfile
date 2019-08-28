@@ -24,7 +24,7 @@ target 'myhome' do
     pod 'FSRouter'
     pod 'FSAccount', '1.7'
 
-    pod 'FSPassword'
+#    pod 'FSPassword'
 #   pod 'FSJZKit'
     pod 'FSContact'
 
@@ -32,9 +32,8 @@ target 'myhome' do
    pod 'FSDiary', :path => '../../../Private/FSDiaryPrivate/'
    pod 'FSBirthday', :path => '../../../Private/FSBirthdayPrivate/'
    pod 'FSJZKit', :path => '../../../FSJZKit'
+   pod 'FSPassword', :path => '../../../Private/FSPasswordPrivate/'
 
-
-#   pod 'FSPassword', :path => '../../../Private/FSPasswordPrivate/'
 #   pod 'FSAccount', :path => '../../../Private/FSAccountPrivate/'
 #   pod 'FSToDo', :path => '../../../Private/FSToDoPrivate/'
 #   pod 'FSContact', :path => '../../../Private/FSContactPrivate/'
