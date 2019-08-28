@@ -9,13 +9,13 @@ target 'myhome' do
 # 三方库都要指定版本，自己的库可以不要指定版本
  
 #    pod 'FSDiary'
-    pod 'FSToDo'
+#    pod 'FSToDo'
     pod 'FSCounter'
     pod 'FSToast'
     pod 'FSCryptor'
     pod 'FSShare'
     pod 'FSGesture'
-#    pod 'FSBirthday'
+    pod 'FSBirthday'
     pod 'FSLocation'
     pod 'FSDBMaster'
     pod 'FSTTS'
@@ -30,12 +30,12 @@ target 'myhome' do
 
    pod 'FSJZBus', :path => '../../../Private/FSPrivateJZBus/'
    pod 'FSDiary', :path => '../../../Private/FSDiaryPrivate/'
-   pod 'FSBirthday', :path => '../../../Private/FSBirthdayPrivate/'
    pod 'FSJZKit', :path => '../../../FSJZKit'
    pod 'FSPassword', :path => '../../../Private/FSPasswordPrivate/'
+   pod 'FSToDo', :path => '../../../Private/FSToDoPrivate/'
 
+#   pod 'FSBirthday', :path => '../../../Private/FSBirthdayPrivate/'
 #   pod 'FSAccount', :path => '../../../Private/FSAccountPrivate/'
-#   pod 'FSToDo', :path => '../../../Private/FSToDoPrivate/'
 #   pod 'FSContact', :path => '../../../Private/FSContactPrivate/'
 #   pod 'FSRouter',:path => '../../../github/Alpha/Components/FSRouter'
 #   pod 'FSTTS',:path => '../../../github/Alpha/Components/FSTTS'
