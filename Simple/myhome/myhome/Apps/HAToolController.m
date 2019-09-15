@@ -80,12 +80,16 @@
     [app handleParts];    
 }
 
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    UITabBar.appearance.translucent = NO;// iOS12，UITabBar跳动的bug
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (self.navigationController.navigationBarHidden) {
         self.navigationController.navigationBarHidden = NO;
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    UITabBar.appearance.translucent = NO;// iOS12，UITabBar跳动的bug
     
     if (!_justOneTime) {
         _justOneTime = YES;
