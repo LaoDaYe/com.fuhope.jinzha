@@ -68,6 +68,7 @@
     NSInteger           _delaySeconds;
     BOOL                _shouldOutput;
     UILabel             *_timeLabel;
+    FSBoardView         *_boardView;
 }
 
 - (void)dealloc{
@@ -163,6 +164,9 @@
 }
 
 - (void)tapFullEvent:(UITapGestureRecognizer *)tap {
+    UIView *label = tap.view;
+    [label removeFromSuperview];
+    return;
     [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"隐藏此视图" message:nil actionTitles:@[@"确定"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
         UIView *label = tap.view;
         [UIView animateWithDuration:.3 animations:^{
@@ -316,36 +320,37 @@
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"File", nil) style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     self.navigationItem.rightBarButtonItem = bbi;
     
-    FSBoardView *boardView = [[FSBoardView alloc] initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 0)];
-    [self.scrollView addSubview:boardView];
+    _boardView = [[FSBoardView alloc] initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 0)];
+    [self.scrollView addSubview:_boardView];
     [self systemBoardView];
-    [self showTimeLabel:boardView];
+    [self showTimeLabel];
     _fs_dispatch_main_queue_async(^{
         [self poet];        
     });
 }
 
-- (void)showTimeLabel:(FSBoardView *)bView{
-    if (!_timeLabel) {
-        __block NSString *s = nil;
-        _fs_dispatch_global_main_queue_async(^{
-            NSArray *dateArray = [FSDate chineseCalendarForDate:[NSDate date]];
-            NSString *nl = [[NSString alloc] initWithFormat:@"%@%@\n",dateArray[1],dateArray[2]];
-           
-            NSDateComponents *c = [FSDate componentForDate:[NSDate date]];
-            NSString *xl = [[NSString alloc] initWithFormat:@"%@-%@-%@\n",@(c.year),[FSKit twoChar:c.month],[FSKit twoChar:c.day]];
-            s = [[NSString alloc] initWithFormat:@"%@%@",xl,nl];
-        }, ^{
-            self ->_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, bView.frame.origin.y + bView.frame.size.height + 50, WIDTHFC, 80)];
-            self ->_timeLabel.text = s;
+- (void)showTimeLabel{
+    __block NSString *s = nil;
+    _fs_dispatch_global_main_queue_async(^{
+        NSArray *dateArray = [FSDate chineseCalendarForDate:[NSDate date]];
+        NSString *nl = [[NSString alloc] initWithFormat:@"%@%@\n",dateArray[1],dateArray[2]];
+       
+        NSDateComponents *c = [FSDate componentForDate:[NSDate date]];
+        NSString *xl = [[NSString alloc] initWithFormat:@"%@-%@-%@\n",@(c.year),[FSKit twoChar:c.month],[FSKit twoChar:c.day]];
+        s = [[NSString alloc] initWithFormat:@"%@%@",xl,nl];
+    }, ^{
+        if (!self->_timeLabel) {
+            self ->_timeLabel = [[UILabel alloc] init];
             self ->_timeLabel.textAlignment = NSTextAlignmentCenter;
             self ->_timeLabel.font = [UIFont systemFontOfSize:18];
             CGFloat rgb = 228 / 255.0;
             self ->_timeLabel.textColor = [UIColor colorWithRed:rgb green:rgb blue:rgb alpha:1.0];
             self ->_timeLabel.numberOfLines = 0;
-            [self.scrollView addSubview:self ->_timeLabel];
-        });
-    }
+        }
+        self->_timeLabel.frame = CGRectMake(0, self->_boardView.frame.origin.y + self->_boardView.frame.size.height + 50, WIDTHFC, 80);
+        self ->_timeLabel.text = s;
+        [self.scrollView addSubview:self ->_timeLabel];
+    });
 }
 
 // 滑到屏幕上半部分就消失
@@ -425,6 +430,7 @@ static NSInteger _boardTag = 889;
 
 - (void)handleAppBecomeActive{
     [self checkFutureAlerts];
+    [self showTimeLabel];
 }
 
 - (void)checkFutureAlerts{
