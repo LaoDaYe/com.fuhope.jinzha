@@ -41,11 +41,13 @@
 #ifdef __OPTIMIZE__
 #if TARGET_IPHONE_SIMULATOR
 #else
+    // 以前方式
+#endif
+#endif
+    
     BuglyConfig *config = [[BuglyConfig alloc] init];
     config.channel = @"App Store";
     [Bugly startWithAppId:@"1fb44af144" config:config];
-#endif
-#endif
 }
 
 - (void)configUMeng{

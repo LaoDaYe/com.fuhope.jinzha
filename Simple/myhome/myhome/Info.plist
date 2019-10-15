@@ -85,9 +85,9 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>请允许定位</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>"距离"功能需要访问您当前地址的经纬度，才能计算出您当前位置与所记录的经纬度之间的距离。</string>
+	<string>&quot;距离&quot;功能需要访问您当前地址的经纬度，才能计算出您当前位置与所记录的经纬度之间的距离。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>"距离"功能需要访问您当前地址的经纬度，才能计算出您当前位置与所记录的经纬度之间的距离。</string>
+	<string>&quot;距离&quot;功能需要访问您当前地址的经纬度，才能计算出您当前位置与所记录的经纬度之间的距离。</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
@@ -108,5 +108,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 </dict>
 </plist>
