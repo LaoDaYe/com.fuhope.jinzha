@@ -34,6 +34,7 @@ target 'myhome' do
    pod 'FSPassword', :path => '../../../Private/FSPasswordPrivate/'
    pod 'FSToDo', :path => '../../../Private/FSToDoPrivate/'
    pod 'FSAccount', :path => '../../../Private/FSAccountPrivate/'
+   pod 'FSUIKit', :path => '../../../FSUIKit'
 
 #   pod 'FSBirthday', :path => '../../../Private/FSBirthdayPrivate/'
 #   pod 'FSContact', :path => '../../../Private/FSContactPrivate/'
@@ -42,7 +43,6 @@ target 'myhome' do
 #   pod 'FSLocation',:path => '../../../github/FSLocation'
 #   pod 'FSCounter', :path => '../../../github/Private/FSCounterPrivate/'
 #   pod 'FSShare', :path => '../../../github/FSShare'
-#   pod 'FSUIKit', :path => '../../../github/FSUIKit'
 #   pod 'FSBaseController', :path => '../../../FSBaseController/'
 #   pod 'FSJZKit', :path => '../../../FSJZKit/'
 
