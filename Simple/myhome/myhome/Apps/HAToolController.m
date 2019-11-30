@@ -333,11 +333,11 @@
     __block NSString *s = nil;
     _fs_dispatch_global_main_queue_async(^{
         NSArray *dateArray = [FSDate chineseCalendarForDate:[NSDate date]];
-        NSString *nl = [[NSString alloc] initWithFormat:@"%@%@\n",dateArray[1],dateArray[2]];
+        NSString *nl = [[NSString alloc] initWithFormat:@"%@%@",dateArray[1],dateArray[2]];
        
         NSDateComponents *c = [FSDate componentForDate:[NSDate date]];
         NSString *xl = [[NSString alloc] initWithFormat:@"%@-%@-%@\n",@(c.year),[FSKit twoChar:c.month],[FSKit twoChar:c.day]];
-        s = [[NSString alloc] initWithFormat:@"%@%@",xl,nl];
+        s = [[NSString alloc] initWithFormat:@"%@%@・%@",xl,nl,[self ChineseWeek:c.weekday]];
     }, ^{
         if (!self->_timeLabel) {
             self ->_timeLabel = [[UILabel alloc] init];
@@ -351,6 +351,11 @@
         self ->_timeLabel.text = s;
         [self.scrollView addSubview:self ->_timeLabel];
     });
+}
+
+- (NSString *)ChineseWeek:(NSInteger)week {
+    NSArray *weeks = @[@"",@"星期日",@"星期一",@"星期二",@"星期三",@"星期四",@"星期五",@"星期六"];
+    return weeks[week];
 }
 
 // 滑到屏幕上半部分就消失
