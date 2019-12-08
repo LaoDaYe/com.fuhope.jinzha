@@ -226,6 +226,7 @@
 - (void)toSetCorePassword{
     dispatch_async(dispatch_get_main_queue(), ^{
         FSPasswordController *password = [[FSPasswordController alloc] init];
+        password.modalPresentationStyle = UIModalPresentationOverFullScreen;
         [self presentViewController:password animated:YES completion:nil];
         __weak typeof(self)this = self;
         password.callback = ^(FSPasswordController *bVC) {
