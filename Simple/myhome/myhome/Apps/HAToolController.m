@@ -243,6 +243,7 @@
 
 - (void)restartAppPage{
     FSRestartAppController *rs = [[FSRestartAppController alloc] init];
+    rs.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:rs animated:YES completion:nil];
 }
 
