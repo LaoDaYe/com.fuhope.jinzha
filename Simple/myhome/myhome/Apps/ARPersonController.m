@@ -46,9 +46,8 @@
 }
 
 - (void)watchSQLite3{
-    FSDBMaster *master = [FSDBMaster sharedInstance];
     FSSqlite3BroswerController *broswer = [[FSSqlite3BroswerController alloc] init];
-    broswer.path = [master dbPath];
+    broswer.path = [FSDBMaster dbPath];
     [self.navigationController pushViewController:broswer animated:YES];
 }
 

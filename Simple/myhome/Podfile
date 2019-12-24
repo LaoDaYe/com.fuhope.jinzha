@@ -17,7 +17,7 @@ target 'myhome' do
     pod 'FSGesture'
     pod 'FSBirthday'
     pod 'FSLocation'
-    pod 'FSDBMaster'
+#    pod 'FSDBMaster'
     pod 'FSTTS'
 
 #    pod 'FSJZBus'
@@ -28,6 +28,7 @@ target 'myhome' do
 #   pod 'FSJZKit'
 #    pod 'FSContact'
 
+   pod 'FSDBMaster',:path => '../../../FSDBMaster/'
    pod 'FSJZBus', :path => '../../../Private/FSPrivateJZBus/'
    pod 'FSDiary', :path => '../../../Private/FSDiaryPrivate/'
    pod 'FSJZKit', :path => '../../../FSJZKit'

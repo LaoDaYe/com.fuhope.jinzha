@@ -134,7 +134,6 @@
         return;
     }
     
-    FSDBMaster *master = [FSDBMaster sharedInstance];
     [FSTrack event:_UMeng_Event_db_import];
     [FSUIKit alertOnCustomWindow:UIAlertControllerStyleActionSheet title:NSLocalizedString(@"Confirm to import this db?", nil) message:nil actionTitles:@[NSLocalizedString(@"Confirm", nil)] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
         NSError *error = nil;
@@ -143,7 +142,7 @@
             [FSUIKit showAlertWithMessageOnCustomWindow:NSLocalizedString(@"Import fail:the file is empty", nil)];
             return;
         }
-        NSString *target = [master dbPathWithFileName:_db_first_name];
+        NSString *target = [FSDBMaster dbPath];
         BOOL success = [myData writeToFile:target atomically:YES];
         if (!success) {
             [FSUIKit showAlertWithMessageOnCustomWindow:error.localizedDescription];

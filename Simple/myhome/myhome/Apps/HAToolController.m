@@ -650,7 +650,7 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)sendEmail{
-    NSString *path = [[FSDBMaster sharedInstance] dbPath];
+    NSString *path = [FSDBMaster dbPath];
     NSFileManager *manager = [NSFileManager defaultManager];
     if (![manager fileExistsAtPath:path]){
         [FSToast show:NSLocalizedString(@"No data", nil)];
@@ -678,7 +678,7 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)shareToWechat{
-    NSString *path = [[FSDBMaster sharedInstance] dbPath];
+    NSString *path = [FSDBMaster dbPath];
     [FSShare wxFileShareActionWithPath:path fileName:[[NSString alloc] initWithFormat:@"%@",[FSDate stringWithDate:[NSDate date] formatter:nil]] extension:@"db" result:^(NSString *bResult) {
         [FSToast show:bResult];
     }];
@@ -998,8 +998,7 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)exportFile{
-    FSDBMaster *master = [FSDBMaster sharedInstance];
-    NSString *filePath = [master dbPath];
+    NSString *filePath = [FSDBMaster dbPath];
     NSFileManager *manager = [NSFileManager defaultManager];
     BOOL fileExist = [manager fileExistsAtPath:filePath];
     if (fileExist == NO) return;
