@@ -1028,7 +1028,7 @@ static NSInteger _boardTag = 889;
 // 每日一温
 NSString *_key_day = @"everyDiary_day";
 - (void)mustSeeOneDiaryEveryday{
-    __block Tuple2 *data = nil;
+    __block Tuple3 *data = nil;
     __block NSInteger today = 0;
     _fs_dispatch_global_main_queue_async(^{
         NSDate *now = [NSDate date];
@@ -1049,11 +1049,23 @@ NSString *_key_day = @"everyDiary_day";
                 return;
             }
             NSString *notToday = @"今天不再提醒";
-            NSString *nextOne = @"下一篇";
             NSString *readed = @"已读";
             NSNumber *type = @(UIAlertActionStyleDefault);
-            
-            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:@[readed,nextOne,notToday] styles:@[type,type,type] handler:^(UIAlertAction *action) {
+
+            NSInteger count = [data._3 integerValue];
+            NSString *nextOne = nil;
+            NSArray *titles = nil;
+            NSArray *styles = nil;
+            if (count > 1) {
+                nextOne = [[NSString alloc] initWithFormat:@"下一篇（1/%ld）",count - 1];
+                titles = @[readed,nextOne,notToday];
+                styles = @[type,type,type];
+            } else {
+                titles = @[readed,notToday];
+                styles = @[type,type];
+            }
+
+            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:titles styles:styles handler:^(UIAlertAction *action) {
                 if ([action.title isEqualToString:notToday]) {
                     [self todayWontShowDiary:today];
                 }else if ([action.title isEqualToString:readed]){
