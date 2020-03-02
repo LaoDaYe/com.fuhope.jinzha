@@ -1057,7 +1057,7 @@ NSString *_key_day = @"everyDiary_day";
             NSArray *titles = nil;
             NSArray *styles = nil;
             if (count > 1) {
-                nextOne = [[NSString alloc] initWithFormat:@"下一篇（1/%ld）",count - 1];
+                nextOne = [[NSString alloc] initWithFormat:@"下一篇（%ld）",count - 1];
                 titles = @[readed,nextOne,notToday];
                 styles = @[type,type,type];
             } else {
