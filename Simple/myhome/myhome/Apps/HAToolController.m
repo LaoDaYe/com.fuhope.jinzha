@@ -744,7 +744,7 @@ static NSInteger _boardTag = 889;
                 [self.navigationController pushViewController:access animated:YES];
             }break;
             case FSActionTypeOther:{
-                [FSKit pushToViewControllerWithClass:@"FSPartListController" navigationController:self.navigationController param:nil configBlock:nil];
+                [FSKit pushToViewControllerWithClass:@"FSToolKitController" navigationController:self.navigationController param:nil configBlock:nil];
             }break;
         default:
             break;
@@ -1052,12 +1052,12 @@ NSString *_key_day = @"everyDiary_day";
             NSString *readed = @"已读";
             NSNumber *type = @(UIAlertActionStyleDefault);
 
-            NSInteger count = [data._3 integerValue];
+            int count = [data._3 intValue];
             NSString *nextOne = nil;
             NSArray *titles = nil;
             NSArray *styles = nil;
             if (count > 1) {
-                nextOne = [[NSString alloc] initWithFormat:@"下一篇（%ld）",count - 1];
+                nextOne = [[NSString alloc] initWithFormat:@"下一篇（%d）",count - 1];
                 titles = @[readed,nextOne,notToday];
                 styles = @[type,type,type];
             } else {
