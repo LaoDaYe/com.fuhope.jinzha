@@ -83,7 +83,7 @@ static NSString  *_Chinese_placeholder = @"人生若只如初见";
     [_button addTarget:self action:@selector(click) forControlEvents:UIControlEventTouchUpInside];
     [self.scrollView addSubview:_button];
     
-    [self addKeyboardNotificationWithBaseOn:_button.bottom + 40];
+//    [self addKeyboardNotificationWithBaseOn:_button.bottom + 40];
 }
 
 - (void)click{

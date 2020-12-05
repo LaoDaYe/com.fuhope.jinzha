@@ -52,6 +52,7 @@
 #import "UIView+Tap.h"
 #import "FSRouter.h"
 #import "FSPwdModel.h"
+#import "FSApp.h"
 
 @interface HAToolController ()
 
@@ -490,7 +491,7 @@ static NSInteger _boardTag = 889;
         [message appendString:message];
 
     if (!self->_moveLabel) {
-        self->_moveLabel = [[FSMoveLabel alloc] initWithFrame:CGRectMake(0, 64 + (FS_iPhone_X * 20), WIDTHFC, 40)];
+        self->_moveLabel = [[FSMoveLabel alloc] initWithFrame:CGRectMake(0, _fs_statusAndNavigatorHeight() + (_fs_isIPhoneX() * 20), WIDTHFC, 40)];
         self->_moveLabel.textColor = HAAPPCOLOR;
         [self.view addSubview:self->_moveLabel];
         __weak typeof(self)this = self;

@@ -140,7 +140,7 @@
             [FSToast show:@"手机设置邮箱后才可以反馈信息"];
             return;
         }
-        [self event:_UMeng_Event_feedback];
+        [FSTrack event:_UMeng_Event_feedback];
         NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
         NSString *subject = [[NSString alloc] initWithFormat:@"%@iOS %@",[infoDictionary objectForKey:@"CFBundleDisplayName"],NSLocalizedString(@"Feedback", nil)];
        
@@ -158,18 +158,18 @@
 }
 
 - (void)evaluate{
-    [self event:_UMeng_Event_cent_start];
+    [FSTrack event:_UMeng_Event_cent_start];
     SKStoreProductViewController *storeVC = [[SKStoreProductViewController alloc] init];
     storeVC.delegate = self;
     [self presentViewController:storeVC animated:YES completion:nil];
     __weak typeof(self)this = self;
     [storeVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:@(1291692536)} completionBlock:^(BOOL result, NSError * error) {
         if (error) {
-            [self event:_UMeng_Event_cent_fail];
+            [FSTrack event:_UMeng_Event_cent_fail];
             [storeVC dismissViewControllerAnimated:YES completion:nil];
             [FSUIKit showAlertWithMessage:error.localizedDescription controller:this];
         }else{
-            [self event:_UMeng_Event_cent_success];
+            [FSTrack event:_UMeng_Event_cent_success];
         }
     }];
 }

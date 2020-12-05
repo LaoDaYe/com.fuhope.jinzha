@@ -46,7 +46,7 @@ target 'myhome' do
 #   pod 'FSTTS',:path => '../../../github/Alpha/Components/FSTTS'
 #   pod 'FSLocation',:path => '../../../github/FSLocation'
     pod 'FSShare', :path => '../../../FSShare'
-#   pod 'FSBaseController', :path => '../../../FSBaseController/'
+    pod 'FSBaseController', :path => '../../../FSBaseController/'
 #   pod 'FSJZKit', :path => '../../../FSJZKit/'
 
 end

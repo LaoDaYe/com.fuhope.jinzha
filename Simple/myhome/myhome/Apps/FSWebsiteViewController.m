@@ -91,7 +91,7 @@
     [self.navigationController pushViewController:webController animated:YES];
     
     NSString *event = [[NSString alloc] initWithFormat:@"webevent_%@",@(order)];
-    [self event:event];
+    [FSTrack event:event];
 }
 
 - (void)leftClick{
