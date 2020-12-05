@@ -26,7 +26,7 @@
 #import "FSAddPwdBookController.h"
 #import "FSCryptorSupport.h"
 #import "FSPasswordController.h"
-#import "FSAPP.h"
+#import "FSJZAPP.h"
 #import "FSTransferDatabaseController.h"
 #import "FSReceiveDatabaseController.h"
 #import "FSRestartAppController.h"
@@ -662,7 +662,7 @@ static NSInteger _boardTag = 889;
     }
     
     NSMutableString *body = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Transfer file to Weyun in email", nil)];
-    NSString *bz = [FSAPP theNewestMessage];
+    NSString *bz = [FSJZAPP theNewestMessage];
     if (_fs_isValidateString(bz)) {
         [body insertString:[[NSString alloc] initWithFormat:@"\n\t(%@:%@)\n",NSLocalizedString(@"Recently", nil),bz] atIndex:0];
     }

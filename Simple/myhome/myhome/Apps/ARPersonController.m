@@ -18,6 +18,7 @@
 #import "FSCryptorSupport.h"
 #import "FSSqlite3BroswerController.h"
 #import <MessageUI/MessageUI.h>
+#import "FSApp.h"
 
 @interface ARPersonController ()<UITableViewDelegate,UITableViewDataSource,SKStoreProductViewControllerDelegate>
 
@@ -90,7 +91,7 @@
     UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"数据库" style:UIBarButtonItemStylePlain target:self action:@selector(birdClick)];
     self.navigationItem.leftBarButtonItem = left;
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, WIDTHFC, HEIGHTFC - 64 - 49) style:UITableViewStylePlain];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, _fs_statusAndNavigatorHeight(), WIDTHFC, HEIGHTFC - _fs_statusAndNavigatorHeight() - 49) style:UITableViewStylePlain];
     tableView.dataSource = self;
     tableView.delegate = self;
     tableView.backgroundColor = [UIColor clearColor];

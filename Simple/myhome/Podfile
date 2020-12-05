@@ -39,6 +39,8 @@ target 'myhome' do
    pod 'FSContact', :path => '../../../Private/FSContactPrivate/'
     pod 'FSCounter', :path => '../../../Private/FSCounterPrivate/'
 
+    pod 'FSApp', :path => '../../../Alpha/Components/FSApp'
+
 #   pod 'FSBirthday', :path => '../../../Private/FSBirthdayPrivate/'
 #   pod 'FSRouter',:path => '../../../github/Alpha/Components/FSRouter'
 #   pod 'FSTTS',:path => '../../../github/Alpha/Components/FSTTS'
