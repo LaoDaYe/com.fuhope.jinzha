@@ -166,14 +166,14 @@
     UIView *label = tap.view;
     [label removeFromSuperview];
     return;
-    [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"隐藏此视图" message:nil actionTitles:@[@"确定"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
-        UIView *label = tap.view;
-        [UIView animateWithDuration:.3 animations:^{
-            label.top = self.view.frame.size.height;
-        } completion:^(BOOL finished) {
-            [label removeFromSuperview];
-        }];
-    }];
+//    [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"隐藏此视图" message:nil actionTitles:@[@"确定"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
+//        UIView *label = tap.view;
+//        [UIView animateWithDuration:.3 animations:^{
+//            label.top = self.view.frame.size.height;
+//        } completion:^(BOOL finished) {
+//            [label removeFromSuperview];
+//        }];
+//    }];
 }
 
 - (void)shouldOutput{
@@ -188,7 +188,10 @@
     }, ^{
         [self checkCorePasswordExist];
         // 每日一温
-        [self mustSeeOneDiaryEveryday];
+        
+        [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
+            [self mustSeeOneDiaryEveryday];
+        }];
     });
 }
 

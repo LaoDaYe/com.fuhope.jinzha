@@ -27,10 +27,18 @@
 //    NSArray *titles = @[NSLocalizedString(@"Home", nil),NSLocalizedString(@"Wap", nil),NSLocalizedString(@"Usage", nil),NSLocalizedString(@"Me", nil)];
 //    NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemFavorites),@(UITabBarSystemItemBookmarks),@(UITabBarSystemItemContacts)];
 //#if DEBUG
+    
+#if DEBUG
     NSArray *array = @[@"HAToolController",@"FSWebsiteViewController",@"ARPersonController"];
     NSArray *titles = @[NSLocalizedString(@"Home", nil),NSLocalizedString(@"Development", nil),NSLocalizedString(@"Me", nil)];
     NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemFavorites),@(UITabBarSystemItemContacts)];
     [self configInitWithClasses:array titles:titles types:types selectedColor:UIColor.blackColor];
+#else
+    NSArray *array = @[@"HAToolController",@"ARPersonController"];
+    NSArray *titles = @[NSLocalizedString(@"Home", nil),NSLocalizedString(@"Me", nil)];
+    NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemContacts)];
+    [self configInitWithClasses:array titles:titles types:types selectedColor:UIColor.blackColor];
+#endif
 }
 
 - (void)configInitWithClasses:(NSArray<NSString*>*)classes titles:(NSArray<NSString*>*)titles types:(NSArray<NSNumber*>*)types selectedColor:(UIColor *)selectedColor{
