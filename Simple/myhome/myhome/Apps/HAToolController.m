@@ -53,12 +53,11 @@
 #import "FSRouter.h"
 #import "FSPwdModel.h"
 
-@interface HAToolController ()<UIDocumentInteractionControllerDelegate>
+@interface HAToolController ()
 
 @property (nonatomic,strong) FSMoveLabel                    *moveLabel;
 @property (nonatomic,assign) NSInteger                      alerts;
 @property (nonatomic,copy) NSString                         *births;
-@property (nonatomic,strong)UIDocumentInteractionController *documentController;
 
 @end
 
@@ -1011,18 +1010,7 @@ static NSInteger _boardTag = 889;
         return;
     }
     NSURL *url = [NSURL fileURLWithPath:path];
-    if (url) {
-        if (!self.documentController) {
-            self.documentController = [UIDocumentInteractionController interactionControllerWithURL:url];
-            [self.documentController setDelegate:self];
-        }else{
-            self.documentController.URL = url;
-        }
-        BOOL canOpen =  [self.documentController presentOpenInMenuFromRect:CGRectZero inView:self.view animated:YES];
-        if (canOpen == NO) {
-            [FSUIKit showAlertWithMessage:@"出现问题，不能打开" controller:self];
-        }
-    }
+    [[FSShare sharedInstance] openUIDocumentInteractionController:url inController:self];
 }
 
 // 每日一温
