@@ -513,40 +513,47 @@ static NSInteger _boardTag = 889;
         [self.view addSubview:_moveLabel];
         __weak typeof(self)this = self;
         _moveLabel.tapBlock = ^(FSMoveLabel *bLabel) {
-            if (this.alerts && (!this.births)) {    // 只有提醒
+            if (this.alerts && (this.births == 0)) {    // 只有提醒
                 [FSUseGestureView verify:this.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
                     [this pushToAlerts];
                 }];
                 return;
             }
-            if (this.births && (!this.alerts)) {    // 只有生日
+            if (this.births && (this.alerts == 0)) {    // 只有生日
                 [FSUseGestureView verify:this.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
                     [this pushToBirth];
                 }];
                 return;
             }
             
-            NSMutableArray *titles = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"Show tomorrow", nil), nil];
-            if (this.alerts) {
-                [titles insertObject:NSLocalizedString(@"ToDo", nil) atIndex:0];
-            }
-            if (this.births) {
-                [titles insertObject:NSLocalizedString(@"Birth", nil) atIndex:0];
+            if (self.births > 0 && self.alerts > 0) {
+                NSMutableArray *titles = [[NSMutableArray alloc] initWithObjects:@"今天不再显示", nil];
+                if (this.alerts) {
+                    [titles insertObject:@"待办" atIndex:0];
+                }
+                if (this.births) {
+                    [titles insertObject:@"生日" atIndex:0];
+                }
+                
+                NSMutableArray *types = [[NSMutableArray alloc] init];
+                for (int x = 0; x < titles.count; x ++) {
+                    if (x == titles.count - 1) {
+                        [types addObject:@(UIAlertActionStyleDestructive)];
+                    }else{
+                        [types addObject:@(UIAlertActionStyleDefault)];
+                    }
+                }
+                [FSUIKit alert:UIAlertControllerStyleActionSheet controller:this title:nil message:nil actionTitles:titles styles:types handler:^(UIAlertAction *action) {
+                    [FSUseGestureView verify:this.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
+                        [this flowEvent:action.title];
+                    }];
+                }];
+                return;
             }
             
-            NSMutableArray *types = [[NSMutableArray alloc] init];
-            for (int x = 0; x < titles.count; x ++) {
-                if (x == titles.count - 1) {
-                    [types addObject:@(UIAlertActionStyleDestructive)];
-                }else{
-                    [types addObject:@(UIAlertActionStyleDefault)];
-                }
+            if ([this.diaryTuple._1 isKindOfClass:NSString.class]) {
+                [this showDiary];
             }
-            [FSUIKit alert:UIAlertControllerStyleActionSheet controller:this title:nil message:nil actionTitles:titles styles:types handler:^(UIAlertAction *action) {
-                [FSUseGestureView verify:this.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
-                    [this flowEvent:action.title];
-                }];
-            }];
         };
     }
     return _moveLabel;
@@ -557,16 +564,15 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)flowEvent:(NSString *)title{
-    if ([title isEqualToString:NSLocalizedString(@"ToDo", nil)]) {
+    if ([title isEqualToString:@"待办"]) {
         [self pushToAlerts];
-    }else if ([title isEqualToString:NSLocalizedString(@"Birth", nil)]){
+    }else if ([title isEqualToString:@"生日"]){
         [self pushToBirth];
-    }else if ([title isEqualToString:NSLocalizedString(@"Show tomorrow", nil)]){
-        NSString *confirm = NSLocalizedString(@"Show tomorrow", nil);
-        [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:confirm message:nil actionTitles:@[NSLocalizedString(@"Confirm", nil)] styles:@[@(UIAlertActionStyleDestructive)] handler:^(UIAlertAction *action) {
+    }else if ([title isEqualToString:@"今天不再显示"]){
+        [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"今天不再显示" message:nil actionTitles:@[@"确认"] styles:@[@(UIAlertActionStyleDestructive)] handler:^(UIAlertAction *action) {
             _fs_userDefaults_setObjectForKey(@(_fs_integerTimeIntevalSince1970()), _UDKey_FirstPageShow);
             self->_moveLabel.hidden = YES;
-            [FSToast show:NSLocalizedString(@"Show tomorrow", nil)];
+            [FSToast show:@"今天不再显示"];
         }];
     }
 }
@@ -1037,6 +1043,11 @@ NSString *_key_day = @"everyDiary_day";
         }
         self.diaryTuple = [FSDiaryAPI everydayReadADiary:FSCryptorSupport.localUserDefaultsCorePassword];
     }, ^{
+        if (![self.diaryTuple._1 isKindOfClass:NSString.class]) {
+            self->_moveLabel.hidden = YES;
+            return;
+        }
+        self.moveLabel.hidden = NO;
         self.moveLabel.text = @"温故而知新，看看过去写的日记...";
     });
 }
