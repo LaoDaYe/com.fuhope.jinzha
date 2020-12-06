@@ -299,7 +299,7 @@
 "Subject" = "科目";
 "Ensure that updates are more realistic" = "请确保更新后更接近真实情况";
 "This data has been reduced and is not supported for modification" = "这条数据被减少过，暂不支持修改";
-"Study hard,account everyday" = "好好学习，天天记账";
+"Study hard,account everyday" = "好好学习，天天向上";
 
 "Please input" = "请输入";
 "Please choose" = "请选择";
@@ -348,7 +348,6 @@
 "Transfer file to Weyun in email" = "\n\t可以在邮件里转存到微云的\"QQ邮箱\"内";
 "[Set] to set gesture code" = "为了安全请去'设置'中设置手势密码";
 "Today" = "今天 ";
-" birthday, quick to say happy birthday" = "过生日,快去关怀一下吧";
 "Show tomorrow" = "今天不再显示";
 "Your 'ToDo' has" = "您的'待办'有";
 "things to do" = "件事需要处理";

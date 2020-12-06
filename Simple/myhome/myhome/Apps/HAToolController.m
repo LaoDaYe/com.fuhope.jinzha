@@ -58,7 +58,8 @@
 
 @property (nonatomic,strong) FSMoveLabel                    *moveLabel;
 @property (nonatomic,assign) NSInteger                      alerts;
-@property (nonatomic,copy) NSString                         *births;
+@property (nonatomic,assign) NSInteger                      births;
+@property (nonatomic,strong) Tuple3                         *diaryTuple;
 
 @end
 
@@ -188,11 +189,6 @@
         [self delaySecondsEvent];
     }, ^{
         [self checkCorePasswordExist];
-        // 每日一温
-        
-        [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
-            [self mustSeeOneDiaryEveryday];
-        }];
     });
 }
 
@@ -444,6 +440,13 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)checkFutureAlerts{
+    NSDate *today = [NSDate date];
+    NSInteger t = [_fs_userDefaults_objectForKey(_UDKey_FirstPageShow) integerValue];
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:t];
+    BOOL isTheSameDay = [FSDate isTheSameDayA:date b:today];
+    if (isTheSameDay)
+        return;
+    
     [FSAlertAPI todoAlertsOnlyCount:YES password:FSCryptorSupport.localUserDefaultsCorePassword callback:^(NSArray *list, NSInteger count) {
         self.alerts = count;
         [self checkBirthday];
@@ -452,50 +455,64 @@ static NSInteger _boardTag = 889;
 
 - (void)checkBirthday{
     [FSBirthdayController todayBirthdays:^(NSArray *birthdays) {
-        if (birthdays.count) {
-            NSMutableString *title = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Today", nil)];
-            for (FSABBirthModel *model in birthdays) {
-                [title appendFormat:@" %@、",[FSCryptor aes256DecryptString:model.name password:FSCryptorSupport.localUserDefaultsCorePassword]];
-            }
-            [title deleteCharactersInRange:NSMakeRange(title.length - 1, 1)];
-            [title appendFormat:NSLocalizedString(@" birthday, quick to say happy birthday", nil)];
-            self.births = title;
-        }else{
-            self.births = nil;
+//        if (birthdays.count) {
+////            NSMutableString *title = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Today", nil)];
+////            for (FSABBirthModel *model in birthdays) {
+////                [title appendFormat:@" %@、",[FSCryptor aes256DecryptString:model.name password:FSCryptorSupport.localUserDefaultsCorePassword]];
+////            }
+////            [title deleteCharactersInRange:NSMakeRange(title.length - 1, 1)];
+////            [title appendFormat:NSLocalizedString(@" birthday, quick to say happy birthday", nil)];
+//            self.births = [[NSString alloc] initWithFormat:@"今天你有%ld个朋友过生日，快去祝TA生日快乐吧!",birthdays.count];
+//        }else{
+//            self.births = nil;
+//        }
+        self.births = birthdays.count;
+        
+        if (self.births > 0 || self.alerts > 0) {
+            [self showMessage];
+        } else {
+            [self mustSeeOneDiaryEveryday];
         }
-        [self showMessage];
     }];
 }
 
 - (void)showMessage{
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSDate *today = [NSDate date];
-        NSInteger t = [_fs_userDefaults_objectForKey(_UDKey_FirstPageShow) integerValue];
-        NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:t];
-        BOOL isTheSameDay = [FSDate isTheSameDayA:date b:today];
-        if (isTheSameDay)
-            return;
         
-        if (self.alerts == 0 && self.births == nil) {
-            self->_moveLabel.hidden = YES;
-            [self->_moveLabel stop];
+        NSMutableString *message = [[NSMutableString alloc] init];
+        if (self.alerts) {
+            [message appendFormat:@"你的'待办'有%ld件事需要处理",self.alerts];
+        }
+        
+        if (self.births) {
+            if (self.alerts) {
+                [message appendFormat:@"，还有%ld个朋友过生日，快去祝TA生日快乐吧!",self.births];
+            } else {
+                [message appendFormat:@"今天有%ld个朋友过生日，快去祝TA生日快乐吧!",self.births];
+            }
+        }
+        
+        static NSString *sMessage = nil;
+        if ([sMessage isEqualToString:message]) {
+            if (self.moveLabel.hidden) {
+                self.moveLabel.hidden = NO;
+            }
             return;
         }
-    NSMutableString *message = [[NSMutableString alloc] init];
-    if (self.alerts) {
-        [message appendFormat:@"%@ %@ %@ ",NSLocalizedString(@"Your 'ToDo' has",nil),@(self.alerts),NSLocalizedString(@"things to do", nil)];
-    }
-    if (self.births) {
-        [message appendFormat:@"%@%@   ",self.alerts?@";":@"",self.births];
-    }
-        [message appendString:message];
+        sMessage = message;
+        self.moveLabel.text = message;
+        [self.moveLabel start];
+        self.moveLabel.hidden = NO;
+    });
+}
 
-    if (!self->_moveLabel) {
-        self->_moveLabel = [[FSMoveLabel alloc] initWithFrame:CGRectMake(0, _fs_statusAndNavigatorHeight() + (_fs_isIPhoneX() * 20), WIDTHFC, 40)];
-        self->_moveLabel.textColor = HAAPPCOLOR;
-        [self.view addSubview:self->_moveLabel];
+- (FSMoveLabel *)moveLabel {
+    if (!_moveLabel) {
+        _moveLabel = [[FSMoveLabel alloc] initWithFrame:CGRectMake(0, _fs_statusAndNavigatorHeight(), WIDTHFC, 50)];
+        _moveLabel.textColor = HAAPPCOLOR;
+        [self.view addSubview:_moveLabel];
         __weak typeof(self)this = self;
-        self->_moveLabel.tapBlock = ^(FSMoveLabel *bLabel) {
+        _moveLabel.tapBlock = ^(FSMoveLabel *bLabel) {
             if (this.alerts && (!this.births)) {    // 只有提醒
                 [FSUseGestureView verify:this.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
                     [this pushToAlerts];
@@ -532,18 +549,7 @@ static NSInteger _boardTag = 889;
             }];
         };
     }
-        static NSString *sMessage = nil;
-        if ([sMessage isEqualToString:message]) {
-            if (self->_moveLabel.hidden) {
-                self->_moveLabel.hidden = NO;
-            }
-            return;
-        }
-        sMessage = message;
-        self->_moveLabel.text = message;
-        [self->_moveLabel start];
-        self->_moveLabel.hidden = NO;
-    });
+    return _moveLabel;
 }
 
 - (void)pushToAlerts{
@@ -568,7 +574,7 @@ static NSInteger _boardTag = 889;
 - (void)pushToBirth{
     FSBirthdayController *b = FSBirthdayController.alloc.init;
     b.password = FSCryptorSupport.localUserDefaultsCorePassword;
-    b.showButton = (self.births.length > 0);
+    b.showButton = (self.births > 0);
     [self.navigationController pushViewController:b animated:YES];
 }
 
@@ -1020,7 +1026,6 @@ static NSInteger _boardTag = 889;
 // 每日一温
 NSString *_key_day = @"everyDiary_day";
 - (void)mustSeeOneDiaryEveryday{
-    __block Tuple3 *data = nil;
     __block NSInteger today = 0;
     _fs_dispatch_global_main_queue_async(^{
         NSDate *now = [NSDate date];
@@ -1030,48 +1035,51 @@ NSString *_key_day = @"everyDiary_day";
         if (today == saved) {
             return;
         }
-        BOOL needShow = c.hour > 21 || c.hour < 10;
-        needShow = YES;
-        if (needShow) {
-            data = [FSDiaryAPI everydayReadADiary:FSCryptorSupport.localUserDefaultsCorePassword];
-        }
+        self.diaryTuple = [FSDiaryAPI everydayReadADiary:FSCryptorSupport.localUserDefaultsCorePassword];
     }, ^{
-        if (data) {
-            if (![data._1 isKindOfClass:NSString.class]) {
-                return;
-            }
-            NSString *notToday = @"今天不再提醒";
-            NSString *readed = @"已读";
-            NSNumber *type = @(UIAlertActionStyleDefault);
-
-            int count = [data._3 intValue];
-            NSString *nextOne = nil;
-            NSArray *titles = nil;
-            NSArray *styles = nil;
-            if (count > 1) {
-                nextOne = [[NSString alloc] initWithFormat:@"下一篇（%d）",count - 1];
-                titles = @[readed,nextOne,notToday];
-                styles = @[type,type,type];
-            } else {
-                titles = @[readed,notToday];
-                styles = @[type,type];
-            }
-
-            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:titles styles:styles handler:^(UIAlertAction *action) {
-                if ([action.title isEqualToString:notToday]) {
-                    [self todayWontShowDiary:today];
-                }else if ([action.title isEqualToString:readed]){
-                    [FSDiaryAPI updateRereadedTime:data._2];
-                }else if ([action.title isEqualToString:nextOne]){
-                    _fs_dispatch_global_main_queue_async(^{
-                        [FSDiaryAPI updateRereadedTime:data._2];
-                    }, ^{
-                        [self mustSeeOneDiaryEveryday];
-                    });
-                }
-            } cancelTitle:@"取消" cancel:nil completion:nil];
-        }
+        self.moveLabel.text = @"温故而知新，看看过去写的日记...";
     });
+}
+
+- (void)showDiary {
+    Tuple3 *data = self.diaryTuple;
+    if (data) {
+        if (![data._1 isKindOfClass:NSString.class]) {
+            return;
+        }
+        NSString *notToday = @"今天不再提醒";
+        NSString *readed = @"已读";
+        NSNumber *type = @(UIAlertActionStyleDefault);
+
+        int count = [data._3 intValue];
+        NSString *nextOne = nil;
+        NSArray *titles = nil;
+        NSArray *styles = nil;
+        if (count > 1) {
+            nextOne = [[NSString alloc] initWithFormat:@"下一篇（%d）",count - 1];
+            titles = @[readed,nextOne,notToday];
+            styles = @[type,type,type];
+        } else {
+            titles = @[readed,notToday];
+            styles = @[type,type];
+        }
+
+        [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:titles styles:styles handler:^(UIAlertAction *action) {
+            if ([action.title isEqualToString:notToday]) {
+                NSDate *now = [NSDate date];
+                NSDateComponents *c = [FSDate componentForDate:now];
+                [self todayWontShowDiary:c.day];
+            }else if ([action.title isEqualToString:readed]){
+                [FSDiaryAPI updateRereadedTime:data._2];
+            }else if ([action.title isEqualToString:nextOne]){
+                _fs_dispatch_global_main_queue_async(^{
+                    [FSDiaryAPI updateRereadedTime:data._2];
+                }, ^{
+                    [self mustSeeOneDiaryEveryday];
+                });
+            }
+        } cancelTitle:@"取消" cancel:nil completion:nil];
+    }
 }
 
 - (void)todayWontShowDiary:(NSInteger)today{
