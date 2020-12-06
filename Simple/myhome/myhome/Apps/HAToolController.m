@@ -60,6 +60,7 @@
 @property (nonatomic,assign) NSInteger                      alerts;
 @property (nonatomic,assign) NSInteger                      births;
 @property (nonatomic,strong) Tuple3                         *diaryTuple;
+@property (nonatomic,assign) BOOL                           isCurrentShow;
 
 @end
 
@@ -70,6 +71,49 @@
     BOOL                _shouldOutput;
     UILabel             *_timeLabel;
     FSBoardView         *_boardView;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _isCurrentShow = YES;
+        
+        [NSNotificationCenter.defaultCenter addObserverForName:FSAppManagerLockScreenNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            UITabBarController *tab = self.navigationController.tabBarController;
+            BOOL needLock = NO;
+            for (UINavigationController *v in tab.viewControllers) {
+                if (v.viewControllers.count > 1) {
+                    needLock = YES;
+                }
+            }
+            
+            if (needLock == NO) {
+                return;
+            }
+
+            [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:nil cancel:^{
+                for (UINavigationController *v in tab.viewControllers) {
+                    [v popToRootViewControllerAnimated:YES];
+                }
+            }];
+        }];
+        
+        [NSNotificationCenter.defaultCenter addObserverForName:@"JZChangeDelaySecondsNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            [self delaySecondsEvent];
+        }];
+        
+        [NSNotificationCenter.defaultCenter addObserverForName:@"HomeHandleForShowViewNotification" object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+            NSString *obj = note.object;
+            [self showFullView:obj];
+        }];
+        
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(shouldOutput) name:_Notifi_sendSqlite3 object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:_Notifi_registerLocalNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needUnlock) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boardViewNotification:) name:FSBoardViewClickNotification object:nil];
+    }
+    return self;
 }
 
 - (void)dealloc{
@@ -92,39 +136,11 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     UITabBar.appearance.translucent = NO;// iOS12，UITabBar跳动的bug
+    _isCurrentShow = YES;
     
     if (!_justOneTime) {
         _justOneTime = YES;
         [self systemStartConfigs];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:FSAppManagerLockScreenNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            UITabBarController *tab = self.navigationController.tabBarController;
-            BOOL needLock = NO;
-            for (UINavigationController *v in tab.viewControllers) {
-                if (v.viewControllers.count > 1) {
-                    needLock = YES;
-                }
-            }
-            
-            if (needLock == NO) {
-                return;
-            }
-
-            [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:nil cancel:^{
-                for (UINavigationController *v in tab.viewControllers) {
-                    [v popToRootViewControllerAnimated:YES];
-                }
-            }];
-        }];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:@"JZChangeDelaySecondsNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            [self delaySecondsEvent];
-        }];
-        
-        [[NSNotificationCenter defaultCenter] addObserverForName:@"HomeHandleForShowViewNotification" object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-            NSString *obj = note.object;
-            [self showFullView:obj];
-        }];
     }else{
         [UIView animateWithDuration:.3 animations:^{
             self.scrollView.contentOffset = CGPointZero;
@@ -144,6 +160,11 @@
         _shouldOutput = NO;
         [self confirmSendEmail];
     }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    _isCurrentShow = NO;
 }
 
 - (void)showFullView:(NSString *)value {
@@ -311,12 +332,6 @@
     UIBarButtonItem *nearby = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Notice", nil) style:UIBarButtonItemStylePlain target:self action:@selector(showNotice)];
     self.navigationItem.leftBarButtonItem = nearby;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldOutput) name:_Notifi_sendSqlite3 object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:_Notifi_registerLocalNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(needUnlock) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boardViewNotification:) name:FSBoardViewClickNotification object:nil];
-    
     self.title = FSKit.appName;
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"File", nil) style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     self.navigationItem.rightBarButtonItem = bbi;
@@ -435,8 +450,10 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)handleAppBecomeActive{
-    [self checkFutureAlerts];
-    [self showTimeLabel];
+    if (self.isCurrentShow) {
+        [self checkFutureAlerts];
+        [self showTimeLabel];
+    }
 }
 
 - (void)checkFutureAlerts{
