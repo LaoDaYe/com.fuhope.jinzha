@@ -29,6 +29,7 @@
 		714E6FEA21BCEA10006756D1 /* libFSAccount.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 714E6FE921BCEA10006756D1 /* libFSAccount.a */; };
 		715669291F9241AA0070993D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7156692B1F9241AA0070993D /* InfoPlist.strings */; };
 		7156692F1F9242640070993D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 715669311F9242640070993D /* Localizable.strings */; };
+		7157E440257D316800EF9F79 /* FSJZStartPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7157E43F257D316800EF9F79 /* FSJZStartPageView.m */; };
 		715A093721EB962F00870731 /* HAToolController.m in Sources */ = {isa = PBXBuildFile; fileRef = 715A093321EB962F00870731 /* HAToolController.m */; };
 		715A093821EB962F00870731 /* ARPersonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 715A093521EB962F00870731 /* ARPersonController.m */; };
 		715A093B21EB96AF00870731 /* FSWebsiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 715A093A21EB96AF00870731 /* FSWebsiteViewController.m */; };
@@ -90,6 +91,8 @@
 		7156692C1F9241AF0070993D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		715669301F9242640070993D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		715669321F9242670070993D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		7157E43E257D316800EF9F79 /* FSJZStartPageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSJZStartPageView.h; sourceTree = "<group>"; };
+		7157E43F257D316800EF9F79 /* FSJZStartPageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FSJZStartPageView.m; sourceTree = "<group>"; };
 		715A093321EB962F00870731 /* HAToolController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAToolController.m; sourceTree = "<group>"; };
 		715A093421EB962F00870731 /* ARPersonController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARPersonController.h; sourceTree = "<group>"; };
 		715A093521EB962F00870731 /* ARPersonController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARPersonController.m; sourceTree = "<group>"; };
@@ -240,6 +243,8 @@
 				715A093A21EB96AF00870731 /* FSWebsiteViewController.m */,
 				718865C922DA2CC0009B1349 /* FSPasswordController.h */,
 				718865C822DA2CC0009B1349 /* FSPasswordController.m */,
+				7157E43E257D316800EF9F79 /* FSJZStartPageView.h */,
+				7157E43F257D316800EF9F79 /* FSJZStartPageView.m */,
 			);
 			path = Apps;
 			sourceTree = "<group>";
@@ -433,6 +438,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CFE601D1DC75B9C003640A4 /* AppDelegate.m in Sources */,
+				7157E440257D316800EF9F79 /* FSJZStartPageView.m in Sources */,
 				718865CA22DA2CC0009B1349 /* FSPasswordController.m in Sources */,
 				5CD810AF1E20C59C0030EE3A /* AppDelegate+Handler.m in Sources */,
 				5CFE601A1DC75B9C003640A4 /* main.m in Sources */,

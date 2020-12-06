@@ -53,6 +53,7 @@
 #import "FSRouter.h"
 #import "FSPwdModel.h"
 #import "FSApp.h"
+#import "FSJZStartPageView.h"
 
 @interface HAToolController ()
 
@@ -206,11 +207,27 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    _fs_dispatch_global_main_queue_async(^{
-        [self delaySecondsEvent];
-    }, ^{
-        [self checkCorePasswordExist];
-    });
+    // 显示启动页
+    __weak typeof(self)this = self;
+    [self showStartPage:^{
+        __strong typeof(this)self = this;
+        _fs_dispatch_global_main_queue_async(^{
+            [self delaySecondsEvent];
+        }, ^{
+            [self checkCorePasswordExist];
+        });
+    }];
+}
+
+- (void)showStartPage:(void(^)(void))startPageWillDismiss {
+    FSJZStartPageView *pView = [[FSJZStartPageView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    [self.tabBarController.view addSubview:pView];
+    
+    pView.willDissmiss = ^(FSJZStartPageView * _Nonnull bView) {
+        if (startPageWillDismiss) {
+            startPageWillDismiss();
+        }
+    };
 }
 
 - (void)delaySecondsEvent{
