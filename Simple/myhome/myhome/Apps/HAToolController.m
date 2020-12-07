@@ -1067,6 +1067,7 @@ static NSInteger _boardTag = 889;
 NSString *_key_day = @"everyDiary_day";
 - (void)mustSeeOneDiaryEveryday{
     __block NSInteger today = 0;
+    __block BOOL needStep = NO;
     _fs_dispatch_global_main_queue_async(^{
         NSDate *now = [NSDate date];
         NSDateComponents *c = [FSDate componentForDate:now];
@@ -1075,8 +1076,12 @@ NSString *_key_day = @"everyDiary_day";
         if (today == saved) {
             return;
         }
+        needStep = YES;
         self.diaryTuple = [FSDiaryAPI everydayReadADiary:FSCryptorSupport.localUserDefaultsCorePassword];
     }, ^{
+        if (needStep == NO) {
+            return;
+        }
         if (![self.diaryTuple._1 isKindOfClass:NSString.class]) {
             self->_moveLabel.hidden = YES;
             return;
@@ -1116,6 +1121,7 @@ NSString *_key_day = @"everyDiary_day";
                 [self todayWontShowDiary:c.day];
             }else if ([action.title isEqualToString:readed]){
                 [FSDiaryAPI updateRereadedTime:data._2];
+                self->_moveLabel.hidden = YES;
             }else if ([action.title isEqualToString:nextOne]){
                 _fs_dispatch_global_main_queue_async(^{
                     [FSDiaryAPI updateRereadedTime:data._2];
@@ -1130,6 +1136,7 @@ NSString *_key_day = @"everyDiary_day";
 - (void)todayWontShowDiary:(NSInteger)today{
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[@"今日不再提示"] styles:@[@(UIAlertActionStyleDestructive)] handler:^(UIAlertAction *action) {
         _fs_userDefaults_setObjectForKey(@(today), _key_day);
+        self->_moveLabel.hidden = YES;
     }];
 }
 

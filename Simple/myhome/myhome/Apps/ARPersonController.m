@@ -82,7 +82,7 @@
 //}
 
 - (void)personDesignViews{
-    _titles = @[NSLocalizedString(@"Feedback", nil),NSLocalizedString(@"Like", nil),NSLocalizedString(@"Give a score", nil),NSLocalizedString(@"Core password", nil),NSLocalizedString(@"Clear pasteboard", nil)];
+    _titles = @[@"反馈",@"支持",@"去评分",@"核心密码",@"清空粘贴板"];
     
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Set", nil) style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     bbi.tintColor = UIColor.blackColor;

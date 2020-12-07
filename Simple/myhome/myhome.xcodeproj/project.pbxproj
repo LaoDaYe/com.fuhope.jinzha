@@ -30,6 +30,7 @@
 		715669291F9241AA0070993D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7156692B1F9241AA0070993D /* InfoPlist.strings */; };
 		7156692F1F9242640070993D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 715669311F9242640070993D /* Localizable.strings */; };
 		7157E440257D316800EF9F79 /* FSJZStartPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7157E43F257D316800EF9F79 /* FSJZStartPageView.m */; };
+		7157E443257E81B400EF9F79 /* MoscoNight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7157E442257E81B400EF9F79 /* MoscoNight.mp3 */; };
 		715A093721EB962F00870731 /* HAToolController.m in Sources */ = {isa = PBXBuildFile; fileRef = 715A093321EB962F00870731 /* HAToolController.m */; };
 		715A093821EB962F00870731 /* ARPersonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 715A093521EB962F00870731 /* ARPersonController.m */; };
 		715A093B21EB96AF00870731 /* FSWebsiteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 715A093A21EB96AF00870731 /* FSWebsiteViewController.m */; };
@@ -93,6 +94,7 @@
 		715669321F9242670070993D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		7157E43E257D316800EF9F79 /* FSJZStartPageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSJZStartPageView.h; sourceTree = "<group>"; };
 		7157E43F257D316800EF9F79 /* FSJZStartPageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FSJZStartPageView.m; sourceTree = "<group>"; };
+		7157E442257E81B400EF9F79 /* MoscoNight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = MoscoNight.mp3; sourceTree = "<group>"; };
 		715A093321EB962F00870731 /* HAToolController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAToolController.m; sourceTree = "<group>"; };
 		715A093421EB962F00870731 /* ARPersonController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARPersonController.h; sourceTree = "<group>"; };
 		715A093521EB962F00870731 /* ARPersonController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARPersonController.m; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				5CD810AE1E20C59C0030EE3A /* AppDelegate+Handler.m */,
 				71A54BF91F77835E005B731E /* ViewController.h */,
 				71A54BFA1F77835E005B731E /* ViewController.m */,
+				7157E442257E81B400EF9F79 /* MoscoNight.mp3 */,
 				715A093221EB962F00870731 /* Apps */,
 				71A54BD41F7670CA005B731E /* Main.storyboard */,
 				5CFE60241DC75B9C003640A4 /* Assets.xcassets */,
@@ -362,6 +365,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7157E443257E81B400EF9F79 /* MoscoNight.mp3 in Resources */,
 				71CC0D4A212F0F3E00BA7BE8 /* NoteForChange in Resources */,
 				718865E422ED70DA009B1349 /* xlwb.jpg in Resources */,
 				718865E122ED70DA009B1349 /* tmall.jpg in Resources */,

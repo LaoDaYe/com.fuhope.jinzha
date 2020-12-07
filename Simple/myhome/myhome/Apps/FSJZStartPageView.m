@@ -10,6 +10,9 @@
 #import "FSApp.h"
 #import "FSKit.h"
 #import "FSDate.h"
+#import "FSTTS.h"
+#import "FSAppConfig.h"
+#import "FSTrack.h"
 
 @implementation FSJZStartPageView {
     UILabel     *_label;
@@ -34,28 +37,44 @@
     _fs_dispatch_global_main_queue_async(^{
         [self handleDatas];
     }, ^{
+        BOOL ttsClose = [[FSAppConfig objectForKey:_appCfg_ttsSwitch] boolValue];
+        if (!ttsClose) {
+            FSTTS *tts = FSTTS.new;
+            [tts speech:self->_tip priority:0 wait:YES];
+        }
+       
         [self startPageDesignViews];
     });
 }
 
 - (void)handleDatas {
-    NSDate *then = [FSDate dateByString:@"2077-05-10 23:59:59" formatter:nil];
-    NSDate *now = NSDate.date;
-    NSTimeInterval tt = [then timeIntervalSince1970];
-    NSTimeInterval tn = [now timeIntervalSince1970];
-    NSTimeInterval delta = tt - tn;
-    NSTimeInterval days = delta / 86400;
-    _days = (NSInteger)days;
-    
-    NSDateComponents *time = [FSDate componentForDate:now];
-    if (time.hour >= 22 || time.hour <= 6) {
-        _tip = @"念华，夜深了 ~";
-    } else if (time.hour > 6 && time.hour <= 12) {
-        _tip = @"念华，上午好 ~";
-    } else if (time.hour > 12 && time.hour <= 18) {
-        _tip = @"念华，下午好 ~";
-    } else {
-        _tip = @"念华，晚上好 ~";
+    NSDate *then = nil;
+    @try {
+        then = [FSDate dateByString:@"2077-05-10 23:59:59" formatter:nil]; // 遇到过崩溃的情况
+    } @catch (NSException *exception) {
+        [FSTrack event:@"startCrash"];
+    } @finally {
+        if (![then isKindOfClass:NSDate.class]) {
+            _tip = @"念华，你好呐 ~";
+            return;
+        }
+        NSDate *now = NSDate.date;
+        NSTimeInterval tt = [then timeIntervalSince1970];
+        NSTimeInterval tn = [now timeIntervalSince1970];
+        NSTimeInterval delta = tt - tn;
+        NSTimeInterval days = delta / 86400;
+        _days = (NSInteger)days;
+        
+        NSDateComponents *time = [FSDate componentForDate:now];
+        if (time.hour >= 22 || time.hour <= 6) {
+            _tip = @"念华，夜深了 ~";
+        } else if (time.hour > 6 && time.hour <= 12) {
+            _tip = @"念华，上午好 ~";
+        } else if (time.hour > 12 && time.hour <= 18) {
+            _tip = @"念华，下午好 ~";
+        } else {
+            _tip = @"念华，晚上好 ~";
+        }
     }
 }
 
@@ -88,20 +107,31 @@
     _timeLabel.alpha = 0;
     [self addSubview:_timeLabel];
     
-    [UIView animateWithDuration:2 animations:^{
+    [UIView animateWithDuration:3 animations:^{
         self-> _label.alpha = 1;
         self-> _timeLabel.alpha = 1;
     } completion:^(BOOL finished) {
-        if (self.willDissmiss) {
-            self.willDissmiss(self);
-        }
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.5 animations:^{
-                self.alpha = 0;
-            } completion:^(BOOL finished) {
-                [self removeFromSuperview];
-            }];
-        });
+        [self dismiss];
+    }];
+    
+    UIView *bgView = [[UIView alloc] initWithFrame:self.bounds];
+    [self addSubview:bgView];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(click)];
+    [bgView addGestureRecognizer:tap];
+}
+
+- (void)click {
+    [self dismiss];
+}
+
+- (void)dismiss {
+    if (self.willDissmiss) {
+        self.willDissmiss(self);
+    }
+    [UIView animateWithDuration:0.5 animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
     }];
 }
 
