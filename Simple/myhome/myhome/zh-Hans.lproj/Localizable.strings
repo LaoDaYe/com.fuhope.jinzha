@@ -4,8 +4,7 @@
 
   Created by FudonFuchina on 2017/10/14.
   Copyright © 2017年 fuhope. All rights reserved.
-*/
-
+ 
 "Home" = "首页";
 "Me" = "我";
 "Account" = "账本";
@@ -470,3 +469,6 @@
 "TV" = "腾讯视频";
 "iQiyi" = "爱奇艺";
 "CCTV" = "央视网";
+ 
+ */
+

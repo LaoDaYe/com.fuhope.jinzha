@@ -4,7 +4,6 @@
 
   Created by FudonFuchina on 2017/10/14.
   Copyright © 2017年 fuhope. All rights reserved.
-*/
 
 "Core password description" = "\tThe only password you need to remember, you can't find it back if you forget it, it can be any text. Your data is encrypted by it to protect security. Cannot be changed after setting. \n\t It can be used to unlock the lock screen password, gesture password, etc.\n\nPrinciple: \n\t1.Don't forget the core password \n\t 2.Don't forget the principle 1";
 
@@ -32,6 +31,8 @@
 "Year rate" = "Rate・%";
 
 "MakeName" = "Note";
+ 
+ */
 
 
 
