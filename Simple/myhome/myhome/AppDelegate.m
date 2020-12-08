@@ -130,16 +130,16 @@
     NSString *file = url.absoluteString;
     NSString *extension = [file pathExtension];
     if (!([extension isEqualToString:@"db"] || [extension isEqualToString:@"sqlite"])) {
-        [FSUIKit showAlertWithMessageOnCustomWindow:NSLocalizedString(@"Only the file import extension, called [db] or [sqlite], is supported", nil)];
+        [FSUIKit showAlertWithMessageOnCustomWindow:@"暂只支持扩展名为[db]或[sqlite]的文件导入"];
         return;
     }
     
     [FSTrack event:_UMeng_Event_db_import];
-    [FSUIKit alertOnCustomWindow:UIAlertControllerStyleActionSheet title:NSLocalizedString(@"Confirm to import this db?", nil) message:nil actionTitles:@[NSLocalizedString(@"Confirm", nil)] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
+    [FSUIKit alertOnCustomWindow:UIAlertControllerStyleActionSheet title:@"确认导入此数据库" message:nil actionTitles:@[@"确认"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
         NSError *error = nil;
         NSData *myData = [NSData dataWithContentsOfURL:url];
         if (!myData) {
-            [FSUIKit showAlertWithMessageOnCustomWindow:NSLocalizedString(@"Import fail:the file is empty", nil)];
+            [FSUIKit showAlertWithMessageOnCustomWindow:@"导入失败：文件为空"];
             return;
         }
         NSString *target = [FSDBMaster dbPath];

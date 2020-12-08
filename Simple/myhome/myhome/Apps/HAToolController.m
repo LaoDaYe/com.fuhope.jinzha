@@ -308,8 +308,8 @@
         return;
     }
     
-    NSString *send = NSLocalizedString(@"Transfer database", nil);
-    NSString *rece = NSLocalizedString(@"Receive database", nil);
+    NSString *send = @"转移数据库";
+    NSString *rece = @"接收数据库";
     NSNumber *type = @(UIAlertActionStyleDefault);
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[send,rece] styles:@[type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:send]) {
@@ -346,11 +346,11 @@
 - (void)homeDesignViewsInMainThread{
 //    [self monthTipsToAppStoreToGrade];
     
-    UIBarButtonItem *nearby = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Notice", nil) style:UIBarButtonItemStylePlain target:self action:@selector(showNotice)];
+    UIBarButtonItem *nearby = [[UIBarButtonItem alloc] initWithTitle:@"说明" style:UIBarButtonItemStylePlain target:self action:@selector(showNotice)];
     self.navigationItem.leftBarButtonItem = nearby;
     
     self.title = FSKit.appName;
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"File", nil) style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"文件" style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     self.navigationItem.rightBarButtonItem = bbi;
     
     _boardView = [[FSBoardView alloc] initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 0)];
@@ -490,12 +490,12 @@ static NSInteger _boardTag = 889;
 - (void)checkBirthday{
     [FSBirthdayController todayBirthdays:^(NSArray *birthdays) {
 //        if (birthdays.count) {
-////            NSMutableString *title = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Today", nil)];
+////            NSMutableString *title = [[NSMutableString alloc] initWithString:(@"Today", nil)];
 ////            for (FSABBirthModel *model in birthdays) {
 ////                [title appendFormat:@" %@、",[FSCryptor aes256DecryptString:model.name password:FSCryptorSupport.localUserDefaultsCorePassword]];
 ////            }
 ////            [title deleteCharactersInRange:NSMakeRange(title.length - 1, 1)];
-////            [title appendFormat:NSLocalizedString(@" birthday, quick to say happy birthday", nil)];
+////            [title appendFormat:(@" birthday, quick to say happy birthday", nil)];
 //            self.births = [[NSString alloc] initWithFormat:@"今天你有%ld个朋友过生日，快去祝TA生日快乐吧!",birthdays.count];
 //        }else{
 //            self.births = nil;
@@ -627,16 +627,16 @@ static NSInteger _boardTag = 889;
 - (void)bbiActionEvent{
     //    BOOL noNet = [FSKitDuty noNet];
     //    if (noNet) {
-    //        [FSKit showAlertWithMessage:NSLocalizedString(@"Please open your net to export file", nil) controller:self];
+    //        [FSKit showAlertWithMessage:(@"Please open your net to export file", nil) controller:self];
     //        return;
     //    }
     
-    NSString *transfer = NSLocalizedString(@"Transfer", nil);
-    NSString *all = NSLocalizedString(@"Database", nil);
-    NSString *file = NSLocalizedString(@"File", nil);
+    NSString *transfer = @"转移";
+    NSString *all = @"数据库";
+    NSString *file = @"文件";
 
     NSNumber *type = @(UIAlertActionStyleDefault);
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:NSLocalizedString(@"Expprt file", nil) message:NSLocalizedString(@"Please export the data to a safe channel to prevent leakage", nil) actionTitles:@[transfer,all,file] styles:@[type,type,type] handler:^(UIAlertAction *action) {
+    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"导出文件" message:@"把数据导出到安全的渠道，注意防止泄露" actionTitles:@[transfer,all,file] styles:@[type,type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:transfer]) {
             [self nearbyAction];
         }else if ([action.title isEqualToString:all]){
@@ -649,12 +649,12 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)fileOutputEvent{
-    NSString *password = NSLocalizedString(@"Password", nil);
-    NSString *diary = NSLocalizedString(@"Diary", nil);
-    NSString *contacts = NSLocalizedString(@"Contact", nil);
+    NSString *password = @"密码";
+    NSString *diary = @"日记";
+    NSString *contacts = @"通讯录";
     
     NSNumber *type = @(UIAlertActionStyleDefault);
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:NSLocalizedString(@"Expprt file", nil) message:NSLocalizedString(@"Please export the data to a safe channel to prevent leakage", nil) actionTitles:@[password,diary,contacts] styles:@[type,type,type] handler:^(UIAlertAction *action) {
+    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"导出文件" message:@"把数据导出到安全的渠道，注意防止泄露" actionTitles:@[password,diary,contacts] styles:@[type,type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:password]) {
             [FSDBTool sendPasswords:FSCryptorSupport.localUserDefaultsCorePassword];
             [FSTrack event:_UMeng_Event_export_password];
@@ -669,13 +669,13 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)exportSQLite3{
-    NSString *system = NSLocalizedString(@"Airdrop", nil);
-    NSString *wechat = NSLocalizedString(@"Wechat", nil);
-    NSString *email = NSLocalizedString(@"Email", nil);
+    NSString *system = @"其他应用打开";
+    NSString *wechat = @"微信";
+    NSString *email = @"邮件";
     
     NSArray *titles = @[system,wechat,email];
     NSNumber *type = @(UIAlertActionStyleDefault);
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:NSLocalizedString(@"Export data", nil) message:nil actionTitles:titles styles:@[type,type,type,type] handler:^(UIAlertAction *action) {
+    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"导出数据" message:nil actionTitles:titles styles:@[type,type,type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:wechat]) {
             [self shareToWechat];
         }else if ([action.title isEqualToString:email]){
@@ -687,8 +687,8 @@ static NSInteger _boardTag = 889;
 }
 
 - (void)confirmSendEmail{
-    NSString *system = NSLocalizedString(@"Airdrop", nil);
-    NSString *email = NSLocalizedString(@"Email", nil);
+    NSString *system = @"其他应用打开";
+    NSString *email = @"邮件";
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[system,email] styles:@[@(UIAlertActionStyleDefault),@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:system]) {
             [self exportFile];
@@ -702,18 +702,18 @@ static NSInteger _boardTag = 889;
     NSString *path = [FSDBMaster dbPath];
     NSFileManager *manager = [NSFileManager defaultManager];
     if (![manager fileExistsAtPath:path]){
-        [FSToast show:NSLocalizedString(@"No data", nil)];
+        [FSToast show:@"没有数据"];
         return;
     }
     NSString *email = [FSAppConfig objectForKey:_appCfg_receivedEmail];
     if (!_fs_isValidateString(email)) {
-        [FSToast show:NSLocalizedString(@"[Set] to config email", nil)];
+        [FSToast show:@"请去【设置】里配置邮件地址"];
     }
     
-    NSMutableString *body = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Transfer file to Weyun in email", nil)];
+    NSMutableString *body = [[NSMutableString alloc] initWithString:@"\n\t可以在邮件里转存到微云的\"QQ邮箱\"内"];
     NSString *bz = [FSJZAPP theNewestMessage];
     if (_fs_isValidateString(bz)) {
-        [body insertString:[[NSString alloc] initWithFormat:@"\n\t(%@:%@)\n",NSLocalizedString(@"Recently", nil),bz] atIndex:0];
+        [body insertString:[[NSString alloc] initWithFormat:@"\n\t(%@:%@)\n",@"最近",bz] atIndex:0];
     }
     long long size = [FSKit fileSizeAtPath:path];
     NSString *str = _fs_KMGUnit((NSInteger)size);
@@ -805,7 +805,7 @@ static NSInteger _boardTag = 889;
               @{Text_Name:@"贷款计算器"},
               @{Text_Name:@"加减计算器"},
             ];
-    [self pushToAccesses:NSLocalizedString(@"Computing tool", nil) datas:datas classArray:nil click:^(NSInteger n) {
+    [self pushToAccesses:@"计算工具" datas:datas classArray:nil click:^(NSInteger n) {
         if (n) {
             [self pushToAccounts:100];
         }else{
@@ -845,19 +845,19 @@ static NSInteger _boardTag = 889;
     NSArray *datas = nil;
 #if DEBUG
         datas = @[
-                     @{Text_Name:NSLocalizedString(@"Calculator", nil)},
-                     @{Text_Name:NSLocalizedString(@"Tax calculator", nil)},
+                     @{Text_Name:@"计算器"},
+                     @{Text_Name:@"个税计算器"},
                      @{Text_Name:@"投资平衡"},
                      @{Text_Name:@"草船借箭"},
                      ];
 #else
         datas = @[
-                     @{Text_Name:NSLocalizedString(@"Calculator", nil)},
-                     //    @{Text_Name:NSLocalizedString(@"Tax calculator", nil)},
+                     @{Text_Name:@"计算器"},
+                     //    @{Text_Name:(@"Tax calculator", nil)},
                      ];
 #endif
     
-    [self pushToAccesses:NSLocalizedString(@"Computing tool", nil) datas:datas classArray:^NSArray *{
+    [self pushToAccesses:@"计算工具" datas:datas classArray:^NSArray *{
         NSArray *classArray = nil;
 #if DEBUG
         classArray = @[
@@ -1033,7 +1033,7 @@ static NSInteger _boardTag = 889;
         }
     }, ^{
         if (_need_show) {
-            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:nil message:NSLocalizedString(@"Give stars", nil) actionTitles:@[NSLocalizedString(@"Give a high score", nil)] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
+            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:nil message:@"欢迎评分" actionTitles:@[@"评论"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
                 NSString *urlStr = @"itms-apps://itunes.apple.com/app/id1291692536";
                 UIApplication *app = [UIApplication sharedApplication];
                 NSURL *url = [NSURL URLWithString:urlStr];
@@ -1041,7 +1041,7 @@ static NSInteger _boardTag = 889;
                     [app openURL:url];
                     [FSTrack event:_UMeng_Event_cent_home];
                 }
-            } cancelTitle:NSLocalizedString(@"Score next time", nil) cancel:nil completion:nil];
+            } cancelTitle:@"下次再说" cancel:nil completion:nil];
         }
     });
 }

@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"Me", nil);
+    self.title = @"我";
     [self personDesignViews];
 }
 
@@ -84,7 +84,7 @@
 - (void)personDesignViews{
     _titles = @[@"反馈",@"支持",@"去评分",@"核心密码",@"清空粘贴板"];
     
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Set", nil) style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     bbi.tintColor = UIColor.blackColor;
     self.navigationItem.rightBarButtonItem = bbi;
     
@@ -142,18 +142,18 @@
         }
         [FSTrack event:_UMeng_Event_feedback];
         NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-        NSString *subject = [[NSString alloc] initWithFormat:@"%@iOS %@",[infoDictionary objectForKey:@"CFBundleDisplayName"],NSLocalizedString(@"Feedback", nil)];
+        NSString *subject = [[NSString alloc] initWithFormat:@"%@iOS %@",[infoDictionary objectForKey:@"CFBundleDisplayName"],@"反馈"];
        
         [FSShare emailShareWithSubject:subject on:self messageBody:nil recipients:@[_feedback_Email] fileData:nil fileName:nil mimeType:nil];
     }else if (row == 1){
-        [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:self.navigationController param:@{@"title":NSLocalizedString(@"Like", nil)} configBlock:nil];
+        [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:self.navigationController param:@{@"title":@"赞"} configBlock:nil];
     }else if (row == 2){
         [self evaluate];
     }else if (row == 3){
         [FSKit pushToViewControllerWithClass:@"FSChangeCorePwdController" navigationController:self.navigationController param:@{@"password":FSCryptorSupport.localUserDefaultsCorePassword?:@""} configBlock:nil];
     }else if (row == 4){
         [FSKit copyToPasteboard:@""];
-        [FSToast show:NSLocalizedString(@"Pasteboard clear", nil)];
+        [FSToast show:@"清空剪切板"];
     }
 }
 

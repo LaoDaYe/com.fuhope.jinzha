@@ -37,7 +37,7 @@ static NSString  *_Chinese_placeholder = @"人生若只如初见";
     self.scrollView.contentSize = CGSizeMake(size.width, size.height + 50 + (isHans?0:(50)));
     
     UILabel *big = [[UILabel alloc] initWithFrame:CGRectMake(30, 70, size.width - 60, 50)];
-    big.text = NSLocalizedString(@"Core Password", nil);
+    big.text = @"核心密码";
     big.textAlignment = NSTextAlignmentCenter;
     big.font = [UIFont boldSystemFontOfSize:28];
     [self.scrollView addSubview:big];
@@ -52,9 +52,9 @@ static NSString  *_Chinese_placeholder = @"人生若只如初见";
         place = @"原来设置的'核心密码'";
         btnTitle = @"校验";
     }else{
-        origin = NSLocalizedString(@"Core password description", nil);
+        origin = @"唯一需要记住的密码，忘了就找不回了，可以是任意文字。你的数据被它加密以保护安全。设置后不能再更改。\n\t当忘记手势密码等时可以用它解锁。\n\n务必牢记两个原则:\n\t一，不要忘记 核心密码\n\t二，不要忘记原则一";
         place = [[NSString alloc] initWithFormat:@"如'%@'，‘%@’",_English_placeholder,_Chinese_placeholder];
-        btnTitle = NSLocalizedString(@"Set", nil);
+        btnTitle = @"设置";
     }
     UILabel *label = [[FSLabel alloc] initWithFrame:CGRectMake(30, 130, size.width - 60, 0)];
     label.text = origin;
@@ -87,22 +87,22 @@ static NSString  *_Chinese_placeholder = @"人生若只如初见";
 - (void)click{
     [self.view endEditing:YES];
     if ([FSKit cleanString:_textField.text].length == 0) {
-        [FSToast show:NSLocalizedString(@"Please input the password", nil)];
+        [FSToast show:@"请输入密码"];
         return;
     }
     if (_textField.text.length < 2) {
-        [FSUIKit showAlertWithMessage:NSLocalizedString(@"For data security, character length at least 3 or above!", nil) controller:self];
+        [FSUIKit showAlertWithMessage:@"为了数据安全，字符长度至少3位或以上!" controller:self];
         return;
     }
     
     if ([_textField.text isEqualToString:_English_placeholder] || [_textField.text isEqualToString:_Chinese_placeholder]) {
-        [FSUIKit showAlertWithMessage:NSLocalizedString(@"This password is not recommended", nil) controller:self];
+        [FSUIKit showAlertWithMessage:@"这个密码不建议使用" controller:self];
         return;
     }
     NSString *text = [_textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *title = [[NSString alloc] initWithFormat:@"%@ [%@]?",NSLocalizedString(@"Confirm use", nil),text];
+    NSString *title = [[NSString alloc] initWithFormat:@"%@ [%@]?",@"确定使用",text];
     
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:title message:nil actionTitles:@[NSLocalizedString(@"I have memorise and use it", nil)] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
+    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:title message:nil actionTitles:@[@"我已牢记，确定使用"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
         BOOL canStepOn = [FSCryptorSupport savePassword:text];
         if (!canStepOn) {
             return;

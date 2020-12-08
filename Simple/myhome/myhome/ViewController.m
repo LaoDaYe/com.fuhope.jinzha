@@ -24,18 +24,18 @@
 
 - (void)createMainFramework{
 //    NSArray *array = @[@"HAToolController",@"FSPartListController",@"FSUsageController",@"ARPersonController"];
-//    NSArray *titles = @[NSLocalizedString(@"Home", nil),NSLocalizedString(@"Wap", nil),NSLocalizedString(@"Usage", nil),NSLocalizedString(@"Me", nil)];
+//    NSArray *titles = @[(@"Home", nil),(@"Wap", nil),(@"Usage", nil),(@"Me", nil)];
 //    NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemFavorites),@(UITabBarSystemItemBookmarks),@(UITabBarSystemItemContacts)];
 //#if DEBUG
     
 #if DEBUG
     NSArray *array = @[@"HAToolController",@"FSWebsiteViewController",@"ARPersonController"];
-    NSArray *titles = @[NSLocalizedString(@"Home", nil),NSLocalizedString(@"Development", nil),NSLocalizedString(@"Me", nil)];
+    NSArray *titles = @[@"Home",@"发展",@"我"];
     NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemFavorites),@(UITabBarSystemItemContacts)];
     [self configInitWithClasses:array titles:titles types:types selectedColor:UIColor.blackColor];
 #else
     NSArray *array = @[@"HAToolController",@"ARPersonController"];
-    NSArray *titles = @[NSLocalizedString(@"Home", nil),NSLocalizedString(@"Me", nil)];
+    NSArray *titles = @[@"Home",@"我"];
     NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemContacts)];
     [self configInitWithClasses:array titles:titles types:types selectedColor:UIColor.blackColor];
 #endif

@@ -111,7 +111,7 @@
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note) {
-                                                      [FSUIKit alertOnCustomWindow:UIAlertControllerStyleAlert title:NSLocalizedString(@"Screenshot Notification", nil) message:NSLocalizedString(@"Share to Wechat?", nil) actionTitles:@[NSLocalizedString(@"Send", nil)] styles:@[@(UIActionSheetStyleDefault)] handler:^(UIAlertAction *action) {
+                                                      [FSUIKit alertOnCustomWindow:UIAlertControllerStyleAlert title:@"截屏通知" message:@"分享给好友？" actionTitles:@[@"发送"] styles:@[@(UIActionSheetStyleDefault)] handler:^(UIAlertAction *action) {
                                                           UIImage *image = [FSImagePicker theNewestImageFromAlbum];
                                                           if ([image isKindOfClass:UIImage.class]) {
                                                               [FSShare wxImageShareActionWithImage:image controller:nil result:^(NSString *bResult) {
@@ -135,7 +135,7 @@
     notification.repeatInterval = NSCalendarUnitDay;
     notification.applicationIconBadgeNumber = 1;
     //通知内容
-    notification.alertBody = NSLocalizedString(@"Study hard,account everyday", nil);
+    notification.alertBody = @"好好学习，天天向上";
     //通知被触发时播放的声音
     notification.soundName = UILocalNotificationDefaultSoundName;
     NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];

@@ -47,26 +47,26 @@
 #endif
     
     NSArray *ts = @[
-           [Tuple3 v1:NSLocalizedString(@"Baidu", nil) v2:@"baidu.jpg" v3:@"https://m.baidu.com"],
-           [Tuple3 v1:NSLocalizedString(@"Tmall",nil) v2:@"tmall.jpg" v3:@"https://www.tmall.com"],
-           [Tuple3 v1:NSLocalizedString(@"Taobao", nil) v2:@"taobao.jpg" v3:@"https://m.taobao.com"],
-           [Tuple3 v1:NSLocalizedString(@"JD", nil) v2:@"jd.jpg" v3:@"http://m.jd.com"],
+           [Tuple3 v1:@"Baidu" v2:@"baidu.jpg" v3:@"https://m.baidu.com"],
+           [Tuple3 v1:@"Tmall" v2:@"tmall.jpg" v3:@"https://www.tmall.com"],
+           [Tuple3 v1:@"Taobao" v2:@"taobao.jpg" v3:@"https://m.taobao.com"],
+           [Tuple3 v1:@"JD" v2:@"jd.jpg" v3:@"http://m.jd.com"],
            
-           [Tuple3 v1:NSLocalizedString(@"Hao123", nil) v2:@"hao123.jpg" v3:@"https://www.hao123.com"],
-           [Tuple3 v1:NSLocalizedString(@"Meituan", nil) v2:@"imeituan.jpg" v3:@"http://i.meituan.com"],
-           [Tuple3 v1:NSLocalizedString(@"Eleme", nil) v2:@"elme.jpg" v3:@"http://m.ele.me"],
-//           [Tuple3 v1:NSLocalizedString(@"Amazon", nil) v2:@"amazon.jpg" v3:@"https://www.amazon.cn"],
-           [Tuple3 v1:NSLocalizedString(@"Mobile", nil) v2:@"mobile.jpeg" v3:@"https://wap.10086.cn"],
+           [Tuple3 v1:@"Hao123" v2:@"hao123.jpg" v3:@"https://www.hao123.com"],
+           [Tuple3 v1:@"Meituan" v2:@"imeituan.jpg" v3:@"http://i.meituan.com"],
+           [Tuple3 v1:@"Eleme" v2:@"elme.jpg" v3:@"http://m.ele.me"],
+//           [Tuple3 v1:(@"Amazon", nil) v2:@"amazon.jpg" v3:@"https://www.amazon.cn"],
+           [Tuple3 v1:@"Mobile" v2:@"mobile.jpeg" v3:@"https://wap.10086.cn"],
 
-           [Tuple3 v1:NSLocalizedString(@"QQ news", nil) v2:@"txxw.jpg" v3:@"http://xw.qq.com"],
-           [Tuple3 v1:NSLocalizedString(@"Netease", nil) v2:@"wyxw.jpg" v3:@"http://3g.163.com"],
-           [Tuple3 v1:NSLocalizedString(@"Weibo", nil) v2:@"xlwb.jpg" v3:@"http://www.weibo.com"],
-           [Tuple3 v1:NSLocalizedString(@"Jianshu", nil) v2:@"jianshu.jpg" v3:@"http://www.jianshu.com"],
+           [Tuple3 v1:@"QQ news" v2:@"txxw.jpg" v3:@"http://xw.qq.com"],
+           [Tuple3 v1:@"Netease" v2:@"wyxw.jpg" v3:@"http://3g.163.com"],
+           [Tuple3 v1:@"Weibo" v2:@"xlwb.jpg" v3:@"http://www.weibo.com"],
+           [Tuple3 v1:@"Jianshu" v2:@"jianshu.jpg" v3:@"http://www.jianshu.com"],
            
-           [Tuple3 v1:NSLocalizedString(@"Youku", nil) v2:@"youku.jpg" v3:@"http://www.youku.com"],
-           [Tuple3 v1:NSLocalizedString(@"TV", nil) v2:@"qqtv.jpg" v3:@"http://m.v.qq.com"],
-           [Tuple3 v1:NSLocalizedString(@"iQiyi", nil) v2:@"iqiyi.jpg" v3:@"http://m.iqiyi.com"],
-           [Tuple3 v1:NSLocalizedString(@"CCTV", nil) v2:@"cctv.jpg" v3:@"http://m.cctv.com"],
+           [Tuple3 v1:@"Youku" v2:@"youku.jpg" v3:@"http://www.youku.com"],
+           [Tuple3 v1:@"TV" v2:@"qqtv.jpg" v3:@"http://m.v.qq.com"],
+           [Tuple3 v1:@"iQiyi" v2:@"iqiyi.jpg" v3:@"http://m.iqiyi.com"],
+           [Tuple3 v1:@"CCTV" v2:@"cctv.jpg" v3:@"http://m.cctv.com"],
            ];
     
     WEAKSELF(this);
