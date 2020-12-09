@@ -505,9 +505,7 @@ static NSInteger _boardTag = 889;
 //        }
         self.births = birthdays.count;
         
-        if (self.births > 0 || self.alerts > 0) {
-            [self showMessage];
-        }
+        [self showMessage];
     }];
 }
 
@@ -1084,6 +1082,7 @@ NSString *_key_day = @"everyDiary_day";
         
         static BOOL isShowEmptyView = NO;
         if (isShowEmptyView == YES) {
+            [self showDiary];
             return;
         }
         isShowEmptyView = YES;
