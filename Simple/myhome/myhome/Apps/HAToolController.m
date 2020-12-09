@@ -73,6 +73,7 @@
     BOOL                _shouldOutput;
     UILabel             *_timeLabel;
     FSBoardView         *_boardView;
+    FSEmptyView         *_emptyView;
 }
 
 - (instancetype)init {
@@ -582,11 +583,6 @@ static NSInteger _boardTag = 889;
                         [this flowEvent:action.title];
                     }];
                 }];
-                return;
-            }
-            
-            if ([this.diaryTuple._1 isKindOfClass:NSString.class]) {
-                [this showDiary];
             }
         };
     }
@@ -1086,20 +1082,28 @@ NSString *_key_day = @"everyDiary_day";
             return;
         }
         
-        FSEmptyView *emptyView = [[FSEmptyView alloc] initWithFrame:self.tabBarController.view.bounds];
+        static BOOL isShowEmptyView = NO;
+        if (isShowEmptyView == YES) {
+            return;
+        }
+        isShowEmptyView = YES;
+        
+        // 只显示一次
+        self->_emptyView = [[FSEmptyView alloc] initWithFrame:self.tabBarController.view.bounds];
 //        emptyView.backgroundColor = [[UIColor alloc] initWithRed:20.0 / 255 green:20 / 255.0 blue:20 / 155.0 alpha:0.28];
-        [self.tabBarController.view addSubview:emptyView];
-        emptyView.click = ^(FSEmptyView * _Nonnull eView) {
-            [eView removeFromSuperview];
+        [self.tabBarController.view addSubview:self->_emptyView];
+        __weak typeof(self)this = self;
+        self->_emptyView.click = ^(FSEmptyView * _Nonnull eView) {
+            [this removeEmptyView];
         };
-           
+        
         CGFloat diaryHeight = 50;
-        UIView *v = [[UIView alloc] initWithFrame:CGRectMake(20, emptyView.frame.size.height, emptyView.frame.size.width - 40, diaryHeight)];
+        UIView *v = [[UIView alloc] initWithFrame:CGRectMake(20, self->_emptyView.frame.size.height, self->_emptyView.frame.size.width - 40, diaryHeight)];
         v.backgroundColor = UIColor.whiteColor;
         v.layer.cornerRadius = 6;
-        [emptyView addSubview:v];
+        [self->_emptyView addSubview:v];
         [UIView animateWithDuration:.5 animations:^{
-            v.frame = CGRectMake(20, emptyView.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, emptyView.frame.size.width - 40, diaryHeight);
+            v.frame = CGRectMake(20, self->_emptyView.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, self->_emptyView.frame.size.width - 40, diaryHeight);
         }];
         
         UILabel *label = [[UILabel alloc] initWithFrame:v.bounds];
@@ -1114,52 +1118,58 @@ NSString *_key_day = @"everyDiary_day";
     });
 }
 
+- (void)removeEmptyView {
+    [self->_emptyView removeFromSuperview];
+    self->_emptyView = nil;
+}
+
 - (void)showDiary {
-    Tuple3 *data = self.diaryTuple;
-    if (data) {
-        if (![data._1 isKindOfClass:NSString.class]) {
-            return;
-        }
-        NSString *notToday = @"今天不再提醒";
-        NSString *readed = @"已读";
-        NSNumber *type = @(UIAlertActionStyleDefault);
-
-        int count = [data._3 intValue];
-        NSString *nextOne = nil;
-        NSArray *titles = nil;
-        NSArray *styles = nil;
-        if (count > 1) {
-            nextOne = [[NSString alloc] initWithFormat:@"下一篇（%d）",count - 1];
-            titles = @[readed,nextOne,notToday];
-            styles = @[type,type,type];
-        } else {
-            titles = @[readed,notToday];
-            styles = @[type,type];
-        }
-
-        [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:titles styles:styles handler:^(UIAlertAction *action) {
-            if ([action.title isEqualToString:notToday]) {
-                NSDate *now = [NSDate date];
-                NSDateComponents *c = [FSDate componentForDate:now];
-                [self todayWontShowDiary:c.day];
-            }else if ([action.title isEqualToString:readed]){
-                [FSDiaryAPI updateRereadedTime:data._2];
-                self->_moveLabel.hidden = YES;
-            }else if ([action.title isEqualToString:nextOne]){
-                _fs_dispatch_global_main_queue_async(^{
-                    [FSDiaryAPI updateRereadedTime:data._2];
-                }, ^{
-                    [self mustSeeOneDiaryEveryday];
-                });
+    [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
+        Tuple3 *data = self.diaryTuple;
+        if (data) {
+            if (![data._1 isKindOfClass:NSString.class]) {
+                return;
             }
-        } cancelTitle:@"取消" cancel:nil completion:nil];
-    }
+            NSString *notToday = @"今天不再提醒";
+            NSString *readed = @"已读";
+            NSNumber *type = @(UIAlertActionStyleDefault);
+
+            int count = [data._3 intValue];
+            NSString *nextOne = nil;
+            NSArray *titles = nil;
+            NSArray *styles = nil;
+            if (count > 1) {
+                nextOne = [[NSString alloc] initWithFormat:@"下一篇（%d）",count - 1];
+                titles = @[readed,nextOne,notToday];
+                styles = @[type,type,type];
+            } else {
+                titles = @[readed,notToday];
+                styles = @[type,type];
+            }
+
+            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:titles styles:styles handler:^(UIAlertAction *action) {
+                [self removeEmptyView];
+                if ([action.title isEqualToString:notToday]) {
+                    NSDate *now = [NSDate date];
+                    NSDateComponents *c = [FSDate componentForDate:now];
+                    [self todayWontShowDiary:c.day];
+                }else if ([action.title isEqualToString:readed]){
+                    [FSDiaryAPI updateRereadedTime:data._2];
+                }else if ([action.title isEqualToString:nextOne]){
+                    _fs_dispatch_global_main_queue_async(^{
+                        [FSDiaryAPI updateRereadedTime:data._2];
+                    }, ^{
+                        [self mustSeeOneDiaryEveryday];
+                    });
+                }
+            } cancelTitle:@"取消" cancel:nil completion:nil];
+        }
+    }];
 }
 
 - (void)todayWontShowDiary:(NSInteger)today{
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[@"今日不再提示"] styles:@[@(UIAlertActionStyleDestructive)] handler:^(UIAlertAction *action) {
         _fs_userDefaults_setObjectForKey(@(today), _key_day);
-        self->_moveLabel.hidden = YES;
     }];
 }
 
