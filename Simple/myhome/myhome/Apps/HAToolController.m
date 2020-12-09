@@ -54,6 +54,7 @@
 #import "FSPwdModel.h"
 #import "FSApp.h"
 #import "FSJZStartPageView.h"
+#import "FSEmptyView.h"
 
 @interface HAToolController ()
 
@@ -215,6 +216,7 @@
             [self delaySecondsEvent];
         }, ^{
             [self checkCorePasswordExist];
+            [self mustSeeOneDiaryEveryday];
         });
     }];
 }
@@ -504,8 +506,6 @@ static NSInteger _boardTag = 889;
         
         if (self.births > 0 || self.alerts > 0) {
             [self showMessage];
-        } else {
-            [self mustSeeOneDiaryEveryday];
         }
     }];
 }
@@ -1083,11 +1083,34 @@ NSString *_key_day = @"everyDiary_day";
             return;
         }
         if (![self.diaryTuple._1 isKindOfClass:NSString.class]) {
-            self->_moveLabel.hidden = YES;
             return;
         }
-        self.moveLabel.hidden = NO;
-        self.moveLabel.text = @"温故而知新，看看过去写的日记...";
+        
+        FSEmptyView *emptyView = [[FSEmptyView alloc] initWithFrame:self.tabBarController.view.bounds];
+//        emptyView.backgroundColor = [[UIColor alloc] initWithRed:20.0 / 255 green:20 / 255.0 blue:20 / 155.0 alpha:0.28];
+        [self.tabBarController.view addSubview:emptyView];
+        emptyView.click = ^(FSEmptyView * _Nonnull eView) {
+            [eView removeFromSuperview];
+        };
+           
+        CGFloat diaryHeight = 50;
+        UIView *v = [[UIView alloc] initWithFrame:CGRectMake(20, emptyView.frame.size.height, emptyView.frame.size.width - 40, diaryHeight)];
+        v.backgroundColor = UIColor.whiteColor;
+        v.layer.cornerRadius = 6;
+        [emptyView addSubview:v];
+        [UIView animateWithDuration:.5 animations:^{
+            v.frame = CGRectMake(20, emptyView.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, emptyView.frame.size.width - 40, diaryHeight);
+        }];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:v.bounds];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont boldSystemFontOfSize:16];
+        label.textColor = [UIColor colorWithRed:0x20/255.0 green:0xbf/255.0 blue:0x66/255.0 alpha:1];
+        label.text = @"看看过去写的日记...";
+        [v addSubview:label];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showDiary)];
+        [v addGestureRecognizer:tap];
     });
 }
 
