@@ -79,17 +79,12 @@
 }
 
 #pragma mark - 从别的应用回来
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
-    return [FSShare handleOpenUrl:url];
-}
-
 // iOS9 以上用这个方法接收
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options{
-    NSString *key = options[UIApplicationOpenURLOptionsSourceApplicationKey];
-    if ([key isEqualToString:@"com.tencent.xin"]){
-        return [FSShare handleOpenUrl:url];
+    BOOL isWechatDo = [FSShare handleOpenUrl:url];
+    if (isWechatDo == NO) {
+        [self handleDBFile:url];
     }
-    [self handleDBFile:url];
 //    NSDictionary * dic = options;
 //    if ([options[UIApplicationOpenURLOptionsSourceApplicationKey] isEqualToString:@"com.sina.weibo"]) {
 //        return [WeiboSDK handleOpenURL:url delegate:[FSShareManager shareInstance]];

@@ -19,10 +19,13 @@
 #import "FSSqlite3BroswerController.h"
 #import <MessageUI/MessageUI.h>
 #import "FSApp.h"
+#import "FSAppConfig.h"
+#import "FSTuple.h"
 
 @interface ARPersonController ()<UITableViewDelegate,UITableViewDataSource,SKStoreProductViewControllerDelegate>
 
-@property (nonatomic,strong) NSArray    *titles;
+@property (nonatomic,strong) UITableView    *tableView;
+@property (nonatomic,strong) NSArray        *titles;
 
 @end
 
@@ -31,7 +34,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"我";
-    [self personDesignViews];
+    [self personHandleDatas];
 }
 
 - (void)bbiAction{
@@ -81,8 +84,27 @@
 //    } cancel:@"Cancel" handler:nil textFieldConifg:nil completion:nil];
 //}
 
+- (void)personHandleDatas {
+    _fs_dispatch_global_main_queue_async(^{
+        NSString *ttsSwitch = [FSAppConfig objectForKey:_appCfg_ttsSwitch];
+        BOOL ttsClose = [ttsSwitch boolValue];
+        self->_titles = @[
+            [Tuple2 v1:@"反馈" v2:@""],
+            [Tuple2 v1:@"支持" v2:@""],
+            [Tuple2 v1:@"去评分" v2:@""],
+            [Tuple2 v1:@"语音开关" v2:ttsClose == YES ? @"关闭":@"打开"],
+            [Tuple2 v1:@"清空粘贴板" v2:@""],
+        ];
+    }, ^{
+        [self personDesignViews];
+    });
+}
+
 - (void)personDesignViews{
-    _titles = @[@"反馈",@"支持",@"去评分",@"核心密码",@"清空粘贴板"];
+    if (_tableView) {
+        [_tableView reloadData];
+        return;
+    }
     
     UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     bbi.tintColor = UIColor.blackColor;
@@ -101,6 +123,7 @@
     [self.view addSubview:tableView];
     UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, WIDTHFC, 10)];
     tableView.tableHeaderView = headView;
+    _tableView = tableView;
     
     UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, WIDTHFC, 50)];
     versionLabel.textAlignment = NSTextAlignmentCenter;
@@ -125,9 +148,13 @@
     static NSString *identifier = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+        cell.detailTextLabel.textColor = UIColor.orangeColor;
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
     }
-    cell.textLabel.text = self.titles[indexPath.row];
+    Tuple2 *t = self.titles[indexPath.row];
+    cell.textLabel.text = t._1;
+    cell.detailTextLabel.text = t._2;
     return cell;
 }
 
@@ -150,7 +177,10 @@
     }else if (row == 2){
         [self evaluate];
     }else if (row == 3){
-        [FSKit pushToViewControllerWithClass:@"FSChangeCorePwdController" navigationController:self.navigationController param:@{@"password":FSCryptorSupport.localUserDefaultsCorePassword?:@""} configBlock:nil];
+        BOOL fp = [[FSAppConfig objectForKey:_appCfg_ttsSwitch] boolValue];
+        NSNumber *num = @(!fp);
+        [FSAppConfig saveObject:num.stringValue forKey:_appCfg_ttsSwitch];
+        [self personHandleDatas];
     }else if (row == 4){
         [FSKit copyToPasteboard:@""];
         [FSToast show:@"清空剪切板"];

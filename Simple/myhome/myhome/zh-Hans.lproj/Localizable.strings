@@ -50,7 +50,6 @@
 "Database" = "数据库";
 "Import Database Description" = "如果您要导入数据库，就停留在这个页面。\n\n导入数据库流程(示例):在[QQ邮箱]中找到您的数据库文件，在邮箱内下载并选择【选择应用打开】，在系统的弹框中找到本App,就可将数据库导入。\n\n数据库导入成功后需要重新启动，请输入导入的数据库的'核心密码'，即不再是你自设一个新的密码，而是该数据库原来的密码。";
 "Please restart this App" = "请重新启动App";
-"Only the file import extension, called [db] or [sqlite], is supported" = "暂只支持扩展名为[db]或[sqlite]的文件导入";
 "You already have a database in your home that does not support coverage" = "您本地已经有了一个数据库，暂不支持覆盖";
 "Import fail:the file is empty" = "导入失败：文件为空";
 "Import success,please restart app" = "导入成功，请关闭应用重新启动";

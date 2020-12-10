@@ -148,6 +148,8 @@
         [UIView animateWithDuration:.3 animations:^{
             self.scrollView.contentOffset = CGPointZero;
         }];
+        
+        [self mustSeeOneDiaryEveryday];
     }
     
     _fs_dispatch_global_queue_async(^{
