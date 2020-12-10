@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FSJZStartPageView : UIView
 
-@property (nonatomic, copy) void (^willDissmiss)(FSJZStartPageView *bView);
+@property (nonatomic, copy, nullable) void (^willDissmiss)(FSJZStartPageView *bView);
 
 @end
 

@@ -127,6 +127,7 @@
 - (void)dismiss {
     if (self.willDissmiss) {
         self.willDissmiss(self);
+        self.willDissmiss = nil;
     }
     [UIView animateWithDuration:0.5 animations:^{
         self.alpha = 0;

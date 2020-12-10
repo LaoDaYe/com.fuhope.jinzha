@@ -54,7 +54,7 @@
 #import "FSPwdModel.h"
 #import "FSApp.h"
 #import "FSJZStartPageView.h"
-#import "FSEmptyView.h"
+//#import "FSEmptyView.h"
 
 @interface HAToolController ()
 
@@ -73,7 +73,7 @@
     BOOL                _shouldOutput;
     UILabel             *_timeLabel;
     FSBoardView         *_boardView;
-    FSEmptyView         *_emptyView;
+    UIView              *_diaryView;
 }
 
 - (instancetype)init {
@@ -1088,41 +1088,45 @@ NSString *_key_day = @"everyDiary_day";
         isShowEmptyView = YES;
         
         // 只显示一次
-        self->_emptyView = [[FSEmptyView alloc] initWithFrame:self.tabBarController.view.bounds];
-//        emptyView.backgroundColor = [[UIColor alloc] initWithRed:20.0 / 255 green:20 / 255.0 blue:20 / 155.0 alpha:0.28];
-        [self.tabBarController.view addSubview:self->_emptyView];
-        __weak typeof(self)this = self;
-        self->_emptyView.click = ^(FSEmptyView * _Nonnull eView) {
-            [this removeEmptyView];
-        };
+//        self->_emptyView = [[FSEmptyView alloc] initWithFrame:self.tabBarController.view.bounds];
+////        emptyView.backgroundColor = [[UIColor alloc] initWithRed:20.0 / 255 green:20 / 255.0 blue:20 / 155.0 alpha:0.28];
+//        [self.tabBarController.view addSubview:self->_emptyView];
+//        __weak typeof(self)this = self;
+//        self->_emptyView.click = ^(FSEmptyView * _Nonnull eView) {
+//            [this removeEmptyView];
+//        };
         
         CGFloat diaryHeight = 50;
-        UIView *v = [[UIView alloc] initWithFrame:CGRectMake(20, self->_emptyView.frame.size.height, self->_emptyView.frame.size.width - 40, diaryHeight)];
-        v.backgroundColor = UIColor.whiteColor;
-        v.layer.cornerRadius = 6;
-        [self->_emptyView addSubview:v];
-        [UIView animateWithDuration:.5 animations:^{
-            v.frame = CGRectMake(20, self->_emptyView.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, self->_emptyView.frame.size.width - 40, diaryHeight);
+        self->_diaryView = [[UIView alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height, self.view.frame.size.width - 40, diaryHeight)];
+        self->_diaryView.backgroundColor = UIColor.whiteColor;
+        self->_diaryView.layer.cornerRadius = 6;
+        [self.view addSubview:self->_diaryView];
+        [UIView animateWithDuration:1 animations:^{
+            self->_diaryView.frame = CGRectMake(20, self.view.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, self.view.frame.size.width - 40, diaryHeight);
         }];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:v.bounds];
+        UILabel *label = [[UILabel alloc] initWithFrame:self->_diaryView.bounds];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont boldSystemFontOfSize:16];
         label.textColor = [UIColor colorWithRed:0x20/255.0 green:0xbf/255.0 blue:0x66/255.0 alpha:1];
         label.text = @"看看过去写的日记...";
-        [v addSubview:label];
+        [self->_diaryView addSubview:label];
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showDiary)];
-        [v addGestureRecognizer:tap];
+        [self->_diaryView addGestureRecognizer:tap];
     });
 }
 
-- (void)removeEmptyView {
-    [self->_emptyView removeFromSuperview];
-    self->_emptyView = nil;
-}
-
 - (void)showDiary {
+    if (_diaryView) {
+        [UIView animateWithDuration:1 animations:^{
+            self->_diaryView.frame = CGRectMake(20, self.view.frame.size.height, self.view.frame.size.width - 40, self->_diaryView.frame.size.height);
+        } completion:^(BOOL finished) {
+            [self->_diaryView removeFromSuperview];
+            self->_diaryView = nil;
+        }];
+    }
+    
     [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
         Tuple3 *data = self.diaryTuple;
         if (data) {
@@ -1147,7 +1151,6 @@ NSString *_key_day = @"everyDiary_day";
             }
 
             [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:@"每日一温" message:data._1 actionTitles:titles styles:styles handler:^(UIAlertAction *action) {
-                [self removeEmptyView];
                 if ([action.title isEqualToString:notToday]) {
                     NSDate *now = [NSDate date];
                     NSDateComponents *c = [FSDate componentForDate:now];
