@@ -149,7 +149,7 @@
             self.scrollView.contentOffset = CGPointZero;
         }];
         
-        [self mustSeeOneDiaryEveryday];
+        [self mustSeeOneDiaryEveryday:NO];
     }
     
     _fs_dispatch_global_queue_async(^{
@@ -219,7 +219,7 @@
             [self delaySecondsEvent];
         }, ^{
             [self checkCorePasswordExist];
-            [self mustSeeOneDiaryEveryday];
+            [self mustSeeOneDiaryEveryday:NO];
         });
     }];
 }
@@ -1061,7 +1061,7 @@ static NSInteger _boardTag = 889;
 
 // 每日一温
 NSString *_key_day = @"everyDiary_day";
-- (void)mustSeeOneDiaryEveryday{
+- (void)mustSeeOneDiaryEveryday:(BOOL)useAlertShowContent {
     __block NSInteger today = 0;
     __block BOOL needStep = NO;
     _fs_dispatch_global_main_queue_async(^{
@@ -1082,13 +1082,11 @@ NSString *_key_day = @"everyDiary_day";
             return;
         }
         
-        static BOOL isShowEmptyView = NO;
-        if (isShowEmptyView == YES) {
+        if (useAlertShowContent) {
             [self showDiary];
             return;
         }
-        isShowEmptyView = YES;
-        
+
         // 只显示一次
 //        self->_emptyView = [[FSEmptyView alloc] initWithFrame:self.tabBarController.view.bounds];
 ////        emptyView.backgroundColor = [[UIColor alloc] initWithRed:20.0 / 255 green:20 / 255.0 blue:20 / 155.0 alpha:0.28];
@@ -1098,24 +1096,26 @@ NSString *_key_day = @"everyDiary_day";
 //            [this removeEmptyView];
 //        };
         
-        CGFloat diaryHeight = 50;
-        self->_diaryView = [[UIView alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height, self.view.frame.size.width - 40, diaryHeight)];
-        self->_diaryView.backgroundColor = UIColor.whiteColor;
-        self->_diaryView.layer.cornerRadius = 6;
-        [self.view addSubview:self->_diaryView];
-        [UIView animateWithDuration:1 animations:^{
-            self->_diaryView.frame = CGRectMake(20, self.view.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, self.view.frame.size.width - 40, diaryHeight);
-        }];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:self->_diaryView.bounds];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont boldSystemFontOfSize:16];
-        label.textColor = [UIColor colorWithRed:0x20/255.0 green:0xbf/255.0 blue:0x66/255.0 alpha:1];
-        label.text = @"看看过去写的日记...";
-        [self->_diaryView addSubview:label];
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showDiary)];
-        [self->_diaryView addGestureRecognizer:tap];
+        if (!self->_diaryView) {
+            CGFloat diaryHeight = 50;
+            self->_diaryView = [[UIView alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height, self.view.frame.size.width - 40, diaryHeight)];
+            self->_diaryView.backgroundColor = UIColor.whiteColor;
+            self->_diaryView.layer.cornerRadius = 6;
+            [self.view addSubview:self->_diaryView];
+            [UIView animateWithDuration:1 animations:^{
+                self->_diaryView.frame = CGRectMake(20, self.view.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, self.view.frame.size.width - 40, diaryHeight);
+            }];
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:self->_diaryView.bounds];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.font = [UIFont boldSystemFontOfSize:16];
+            label.textColor = [UIColor colorWithRed:0x20/255.0 green:0xbf/255.0 blue:0x66/255.0 alpha:1];
+            label.text = @"看看过去写的日记...";
+            [self->_diaryView addSubview:label];
+            
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showDiary)];
+            [self->_diaryView addGestureRecognizer:tap];
+        }
     });
 }
 
@@ -1163,7 +1163,7 @@ NSString *_key_day = @"everyDiary_day";
                     _fs_dispatch_global_main_queue_async(^{
                         [FSDiaryAPI updateRereadedTime:data._2];
                     }, ^{
-                        [self mustSeeOneDiaryEveryday];
+                        [self mustSeeOneDiaryEveryday:YES];
                     });
                 }
             } cancelTitle:@"取消" cancel:nil completion:nil];
