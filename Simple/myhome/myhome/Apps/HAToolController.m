@@ -54,6 +54,7 @@
 #import "FSPwdModel.h"
 #import "FSApp.h"
 #import "FSJZStartPageView.h"
+#import "FSWebKitController.h"
 //#import "FSEmptyView.h"
 
 @interface HAToolController ()
@@ -733,7 +734,16 @@ static NSInteger _boardTag = 889;
     NSInteger type = [t._3 integerValue];
     if (type == FSActionTypeCalculator) {
         [self pushToCalculators];
-    }else{
+    } else if (type == FSActionTypeOther) {
+#if DEBUG
+        [FSKit pushToViewControllerWithClass:@"FSToolKitController" navigationController:self.navigationController param:nil configBlock:nil];
+        
+#else
+        FSWebKitController *webController = [[FSWebKitController alloc] init];
+        webController.urlString = @"https://m.baidu.com";
+        [self.navigationController pushViewController:webController animated:YES];
+#endif
+    } else{
         [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
             [self actionForTypeExec:t type:type];
         }];
@@ -787,9 +797,6 @@ static NSInteger _boardTag = 889;
                     [FSKit pushToViewControllerWithClass:classArray[bIndexPath.row] navigationController:this.navigationController param:nil configBlock:nil];
                 };
                 [self.navigationController pushViewController:access animated:YES];
-            }break;
-            case FSActionTypeOther:{
-                [FSKit pushToViewControllerWithClass:@"FSToolKitController" navigationController:self.navigationController param:nil configBlock:nil];
             }break;
         default:
             break;
