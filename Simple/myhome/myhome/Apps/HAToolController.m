@@ -1076,17 +1076,11 @@ NSString *_key_day = @"everyDiary_day";
         self.diaryTuple = [FSDiaryAPI everydayReadADiary:FSCryptorSupport.localUserDefaultsCorePassword];
     }, ^{
         if (needStep == NO) {
+            [self diaryViewDismiss];
             return;
         }
         if (![self.diaryTuple._1 isKindOfClass:NSString.class]) {
-            if (self->_diaryView) {
-                [UIView animateWithDuration:1 animations:^{
-                    self->_diaryView.frame = CGRectMake(20, HEIGHTFC, WIDTHFC - 40, self->_diaryView.frame.size.height);
-                } completion:^(BOOL finished) {
-                    [self->_diaryView removeFromSuperview];
-                    self->_diaryView = nil;
-                }];
-            }
+            [self diaryViewDismiss];
             return;
         }
         
@@ -1125,6 +1119,17 @@ NSString *_key_day = @"everyDiary_day";
             [self->_diaryView addGestureRecognizer:tap];
         }
     });
+}
+
+- (void)diaryViewDismiss {
+    if (self->_diaryView) {
+        [UIView animateWithDuration:1 animations:^{
+            self->_diaryView.frame = CGRectMake(20, HEIGHTFC, WIDTHFC - 40, self->_diaryView.frame.size.height);
+        } completion:^(BOOL finished) {
+            [self->_diaryView removeFromSuperview];
+            self->_diaryView = nil;
+        }];
+    }
 }
 
 - (void)showDiary {
@@ -1174,7 +1179,7 @@ NSString *_key_day = @"everyDiary_day";
 - (void)todayWontShowDiary:(NSInteger)today{
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[@"今日不再提示"] styles:@[@(UIAlertActionStyleDestructive)] handler:^(UIAlertAction *action) {
         _fs_userDefaults_setObjectForKey(@(today), _key_day);
-        [self mustSeeOneDiaryEveryday:NO];
+        [self diaryViewDismiss];
     }];
 }
 

@@ -215,7 +215,6 @@
 "File received complete and does it cover the local database?" = "文件接收完成，是否覆盖本地数据库?";
 "Cover" = "覆盖";
 "The connection is full" = "连接人数已满";
-"Search devices" = "搜索设备";
 "Send complete" = "发送完成";
 "Connect" = "连接";
 "Connected" = "已连上";
