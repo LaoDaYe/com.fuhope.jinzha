@@ -97,7 +97,7 @@
 	<string>请允许访问定位功能，方便您使用根据经纬度计算的&apos;距离&apos;功能</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>请允许访问定位功能，方便您使用根据经纬度计算的&apos;距离&apos;功能</string>
-	<key>NSLocationAlawaysUsageDescription</key>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>请允许访问定位功能，方便您使用根据经纬度计算的&apos;距离&apos;功能</string>
 	<key>NSMainStoryboardFile</key>
 	<string>Main</string>
