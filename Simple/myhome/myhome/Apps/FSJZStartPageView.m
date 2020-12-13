@@ -87,16 +87,28 @@
     imgView.clipsToBounds = YES;
     [self addSubview:imgView];
     
-    UIImageView *headImageView = [[UIImageView alloc] initWithFrame:CGRectMake(UIScreen.mainScreen.bounds.size.width / 2 - 39.9, _fs_statusAndNavigatorHeight(), 80, 80)];
+    BOOL isSmallScreenLikePhone = (UIScreen.mainScreen.bounds.size.height < 700); // iPhone 6 的屏幕高度为667
+
+    CGFloat headSize = 80;
+    if (isSmallScreenLikePhone) {
+        headSize = 70;
+    }
+    
+    UIImageView *headImageView = [[UIImageView alloc] initWithFrame:CGRectMake(UIScreen.mainScreen.bounds.size.width / 2 - headSize / 2, _fs_statusAndNavigatorHeight(), headSize, headSize)];
     headImageView.image = [UIImage imageNamed:@"start_heart"];
     headImageView.contentMode = UIViewContentModeScaleAspectFill;
     headImageView.clipsToBounds = YES;
     [self addSubview:headImageView];
     
-    _label = [[UILabel alloc] initWithFrame:CGRectMake(10, headImageView.frame.origin.y + headImageView.frame.size.height + 20, UIScreen.mainScreen.bounds.size.width - 20, 60)];
+    CGFloat fontSize = 30;
+    if (isSmallScreenLikePhone) {
+        fontSize = 25;
+    }
+    
+    _label = [[UILabel alloc] initWithFrame:CGRectMake(10, headImageView.frame.origin.y + headImageView.frame.size.height + 20 - isSmallScreenLikePhone * 10, UIScreen.mainScreen.bounds.size.width - 20, 60 - isSmallScreenLikePhone * 10)];
     _label.text = _tip;
     _label.textAlignment = NSTextAlignmentCenter;
-    _label.font = [UIFont systemFontOfSize:30];
+    _label.font = [UIFont systemFontOfSize:fontSize];
     _label.alpha = 0;
     [self addSubview:_label];
     
