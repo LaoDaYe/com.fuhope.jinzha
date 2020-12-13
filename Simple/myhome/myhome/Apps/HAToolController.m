@@ -1079,6 +1079,14 @@ NSString *_key_day = @"everyDiary_day";
             return;
         }
         if (![self.diaryTuple._1 isKindOfClass:NSString.class]) {
+            if (self->_diaryView) {
+                [UIView animateWithDuration:1 animations:^{
+                    self->_diaryView.frame = CGRectMake(20, HEIGHTFC, WIDTHFC - 40, self->_diaryView.frame.size.height);
+                } completion:^(BOOL finished) {
+                    [self->_diaryView removeFromSuperview];
+                    self->_diaryView = nil;
+                }];
+            }
             return;
         }
         
@@ -1098,12 +1106,12 @@ NSString *_key_day = @"everyDiary_day";
         
         if (!self->_diaryView) {
             CGFloat diaryHeight = 50;
-            self->_diaryView = [[UIView alloc] initWithFrame:CGRectMake(20, self.view.frame.size.height, self.view.frame.size.width - 40, diaryHeight)];
+            self->_diaryView = [[UIView alloc] initWithFrame:CGRectMake(20, HEIGHTFC, WIDTHFC - 40, diaryHeight)];
             self->_diaryView.backgroundColor = UIColor.whiteColor;
             self->_diaryView.layer.cornerRadius = 6;
             [self.view addSubview:self->_diaryView];
             [UIView animateWithDuration:1 animations:^{
-                self->_diaryView.frame = CGRectMake(20, self.view.frame.size.height - _fs_tabbarHeight() - diaryHeight - 10, self.view.frame.size.width - 40, diaryHeight);
+                self->_diaryView.frame = CGRectMake(20, HEIGHTFC - _fs_tabbarHeight() - diaryHeight - 10, WIDTHFC - 40, diaryHeight);
             }];
             
             UILabel *label = [[UILabel alloc] initWithFrame:self->_diaryView.bounds];
@@ -1120,15 +1128,6 @@ NSString *_key_day = @"everyDiary_day";
 }
 
 - (void)showDiary {
-    if (_diaryView) {
-        [UIView animateWithDuration:1 animations:^{
-            self->_diaryView.frame = CGRectMake(20, self.view.frame.size.height, self.view.frame.size.width - 40, self->_diaryView.frame.size.height);
-        } completion:^(BOOL finished) {
-            [self->_diaryView removeFromSuperview];
-            self->_diaryView = nil;
-        }];
-    }
-    
     [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
         Tuple3 *data = self.diaryTuple;
         if (data) {
@@ -1159,6 +1158,7 @@ NSString *_key_day = @"everyDiary_day";
                     [self todayWontShowDiary:c.day];
                 }else if ([action.title isEqualToString:readed]){
                     [FSDiaryAPI updateRereadedTime:data._2];
+                    [self mustSeeOneDiaryEveryday:NO];
                 }else if ([action.title isEqualToString:nextOne]){
                     _fs_dispatch_global_main_queue_async(^{
                         [FSDiaryAPI updateRereadedTime:data._2];
@@ -1174,6 +1174,7 @@ NSString *_key_day = @"everyDiary_day";
 - (void)todayWontShowDiary:(NSInteger)today{
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[@"今日不再提示"] styles:@[@(UIAlertActionStyleDestructive)] handler:^(UIAlertAction *action) {
         _fs_userDefaults_setObjectForKey(@(today), _key_day);
+        [self mustSeeOneDiaryEveryday:NO];
     }];
 }
 

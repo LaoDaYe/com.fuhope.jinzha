@@ -161,7 +161,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger row = indexPath.row;
-    if (row == 0){
+    if (row == 0){        
         BOOL canSendMail = [MFMailComposeViewController canSendMail];
         if (!canSendMail) {
             [FSToast show:@"手机设置邮箱后才可以反馈信息"];
