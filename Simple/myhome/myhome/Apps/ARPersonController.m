@@ -90,7 +90,7 @@
         BOOL ttsClose = [ttsSwitch boolValue];
         self->_titles = @[
             [Tuple2 v1:@"反馈" v2:@""],
-            [Tuple2 v1:@"支持" v2:@""],
+            [Tuple2 v1:@"关于念华" v2:@""],
             [Tuple2 v1:@"去评分" v2:@""],
             [Tuple2 v1:@"静音模式" v2:ttsClose == YES ? @"打开":@"关闭"],
             [Tuple2 v1:@"清空粘贴板" v2:@""],
@@ -161,7 +161,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger row = indexPath.row;
-    if (row == 0){        
+    if (row == 0){
         BOOL canSendMail = [MFMailComposeViewController canSendMail];
         if (!canSendMail) {
             [FSToast show:@"手机设置邮箱后才可以反馈信息"];
@@ -173,7 +173,7 @@
        
         [FSShare emailShareWithSubject:subject on:self messageBody:nil recipients:@[_feedback_Email] fileData:nil fileName:nil mimeType:nil];
     }else if (row == 1){
-        [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:self.navigationController param:@{@"title":@"赞"} configBlock:nil];
+        [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:self.navigationController param:@{@"title":@"关于念华"} configBlock:nil];
     }else if (row == 2){
         [self evaluate];
     }else if (row == 3){
