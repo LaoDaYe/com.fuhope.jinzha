@@ -91,7 +91,7 @@
         self->_titles = @[
             [Tuple2 v1:@"反馈" v2:@""],
             [Tuple2 v1:@"关于念华" v2:@""],
-            [Tuple2 v1:@"去评分" v2:@""],
+//            [Tuple2 v1:@"去评分" v2:@""],
             [Tuple2 v1:@"静音模式" v2:ttsClose == YES ? @"打开":@"关闭"],
             [Tuple2 v1:@"清空粘贴板" v2:@""],
         ];
@@ -174,35 +174,35 @@
         [FSShare emailShareWithSubject:subject on:self messageBody:nil recipients:@[_feedback_Email] fileData:nil fileName:nil mimeType:nil];
     }else if (row == 1){
         [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:self.navigationController param:@{@"title":@"关于念华"} configBlock:nil];
+//    }else if (row == 2){
+//        [self evaluate];
     }else if (row == 2){
-        [self evaluate];
-    }else if (row == 3){
         BOOL fp = [[FSAppConfig objectForKey:_appCfg_ttsSwitch] boolValue];
         NSNumber *num = @(!fp);
         [FSAppConfig saveObject:num.stringValue forKey:_appCfg_ttsSwitch];
         [self personHandleDatas];
-    }else if (row == 4){
+    }else if (row == 3){
         [FSKit copyToPasteboard:@""];
         [FSToast show:@"清空剪切板"];
     }
 }
 
-- (void)evaluate{
-    [FSTrack event:_UMeng_Event_cent_start];
-    SKStoreProductViewController *storeVC = [[SKStoreProductViewController alloc] init];
-    storeVC.delegate = self;
-    [self presentViewController:storeVC animated:YES completion:nil];
-    __weak typeof(self)this = self;
-    [storeVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:@(1291692536)} completionBlock:^(BOOL result, NSError * error) {
-        if (error) {
-            [FSTrack event:_UMeng_Event_cent_fail];
-            [storeVC dismissViewControllerAnimated:YES completion:nil];
-            [FSUIKit showAlertWithMessage:error.localizedDescription controller:this];
-        }else{
-            [FSTrack event:_UMeng_Event_cent_success];
-        }
-    }];
-}
+//- (void)evaluate{
+//    [FSTrack event:_UMeng_Event_cent_start];
+//    SKStoreProductViewController *storeVC = [[SKStoreProductViewController alloc] init];
+//    storeVC.delegate = self;
+//    [self presentViewController:storeVC animated:YES completion:nil];
+//    __weak typeof(self)this = self;
+//    [storeVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:@(1291692536)} completionBlock:^(BOOL result, NSError * error) {
+//        if (error) {
+//            [FSTrack event:_UMeng_Event_cent_fail];
+//            [storeVC dismissViewControllerAnimated:YES completion:nil];
+//            [FSUIKit showAlertWithMessage:error.localizedDescription controller:this];
+//        }else{
+//            [FSTrack event:_UMeng_Event_cent_success];
+//        }
+//    }];
+//}
 
 - (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController{
     [self dismissViewControllerAnimated:YES completion:nil];
