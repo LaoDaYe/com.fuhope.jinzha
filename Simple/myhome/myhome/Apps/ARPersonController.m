@@ -92,7 +92,7 @@
             [Tuple2 v1:@"反馈" v2:@""],
             [Tuple2 v1:@"支持" v2:@""],
             [Tuple2 v1:@"去评分" v2:@""],
-            [Tuple2 v1:@"语音开关" v2:ttsClose == YES ? @"关闭":@"打开"],
+            [Tuple2 v1:@"静音模式" v2:ttsClose == YES ? @"打开":@"关闭"],
             [Tuple2 v1:@"清空粘贴板" v2:@""],
         ];
     }, ^{
