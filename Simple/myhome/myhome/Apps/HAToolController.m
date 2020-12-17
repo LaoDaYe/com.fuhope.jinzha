@@ -163,7 +163,7 @@
     
     if (_shouldOutput) {
         _shouldOutput = NO;
-        [self confirmSendEmail];
+        [self exportFile];
     }
 }
 
@@ -963,7 +963,7 @@
 //        NSDateComponents *c = [FSDate componentForDate:today];
 //        if (c.day == 26) {
 //            NSString *key = NSStringFromSelector(_cmd);
-//            
+//
 //            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
 //            NSString *s = [ud objectForKey:key];
 //            NSTimeInterval t = [s doubleValue];

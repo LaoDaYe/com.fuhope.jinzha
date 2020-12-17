@@ -30,12 +30,12 @@
     
 #if DEBUG
     NSArray *array = @[@"HAToolController",@"FSWebsiteViewController",@"ARPersonController"];
-    NSArray *titles = @[@"Home",@"发展",@"我"];
+    NSArray *titles = @[@"念华",@"发展",@"我"];
     NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemFavorites),@(UITabBarSystemItemContacts)];
     [self configInitWithClasses:array titles:titles types:types selectedColor:UIColor.blackColor];
 #else
     NSArray *array = @[@"HAToolController",@"ARPersonController"];
-    NSArray *titles = @[@"Home",@"我"];
+    NSArray *titles = @[@"念华",@"我"];
     NSArray *types = @[@(UITabBarSystemItemMostViewed),@(UITabBarSystemItemContacts)];
     [self configInitWithClasses:array titles:titles types:types selectedColor:UIColor.blackColor];
 #endif
