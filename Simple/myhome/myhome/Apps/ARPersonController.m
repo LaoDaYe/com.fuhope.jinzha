@@ -92,21 +92,31 @@
             [FSShare emailShareWithSubject:subject on:this messageBody:nil recipients:@[_feedback_Email] fileData:nil fileName:nil mimeType:nil];
         };
     }
-    
-    if (!_aboutCell) {
-        _aboutCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-        _aboutCell.frame = CGRectMake(0, _feedbackCell.bottom + 1, WIDTHFC, 64);
-        _aboutCell.textLabel.text = @"关于念华";
-        _aboutCell.backgroundColor = UIColor.whiteColor;
-        [self.scrollView addSubview:_aboutCell];
-        _aboutCell.block = ^(FSTapCell *bCell) {
-            [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:this.navigationController param:@{@"title":@"关于念华"} configBlock:nil];
+        
+    if (!self->_clearCell) {
+        self->_clearCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+        self->_clearCell.frame = CGRectMake(0, self->_feedbackCell.bottom + 1, WIDTHFC, 64);
+        self->_clearCell.textLabel.text = @"清除缓存";
+        self->_clearCell.detailTextLabel.font = [UIFont systemFontOfSize:13];
+        self->_clearCell.backgroundColor = UIColor.whiteColor;
+        [self.scrollView addSubview:self->_clearCell];
+        self->_clearCell.block = ^(FSTapCell *bCell) {
+            [this clearCache];
         };
     }
     
+    _fs_dispatch_global_queue_sync(^{
+        [FSCacheManager allCacheSize:^(NSUInteger bResult) {
+            NSString *cache = _fs_KMGUnit(bResult);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self->_clearCell.detailTextLabel.text = cache;
+            });
+        }];
+    });
+        
     if (!_silenceCell) {
         _silenceCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-        _silenceCell.frame = CGRectMake(0, _aboutCell.bottom + 1, WIDTHFC, 64);
+        _silenceCell.frame = CGRectMake(0, _clearCell.bottom + 1, WIDTHFC, 64);
         _silenceCell.textLabel.text = @"静音模式";
         _silenceCell.backgroundColor = UIColor.whiteColor;
         [self.scrollView addSubview:_silenceCell];
@@ -128,43 +138,10 @@
         self-> _ttsSwitch.on = ttsClose;
     });
     
-    if (!self->_clearCell) {
-        self->_clearCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-        self->_clearCell.frame = CGRectMake(0, self->_silenceCell.bottom + 1, WIDTHFC, 64);
-        self->_clearCell.textLabel.text = @"清除缓存";
-        self->_clearCell.detailTextLabel.font = [UIFont systemFontOfSize:13];
-        self->_clearCell.backgroundColor = UIColor.whiteColor;
-        [self.scrollView addSubview:self->_clearCell];
-        self->_clearCell.block = ^(FSTapCell *bCell) {
-            [this clearCache];
-        };
-    }
-    
-    _fs_dispatch_global_queue_sync(^{
-        [FSCacheManager allCacheSize:^(NSUInteger bResult) {
-            NSString *cache = _fs_KMGUnit(bResult);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self->_clearCell.detailTextLabel.text = cache;
-            });
-        }];
-    });
-    
-    if (!_pasteCell) {
-        _pasteCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-        _pasteCell.frame = CGRectMake(0, _clearCell.bottom + 1, WIDTHFC, 64);
-        _pasteCell.textLabel.text = @"清空剪切板";
-        _pasteCell.backgroundColor = UIColor.whiteColor;
-        [self.scrollView addSubview:_pasteCell];
-        _pasteCell.block = ^(FSTapCell *bCell) {
-            [FSKit copyToPasteboard:@""];
-            [FSToast show:@"清空剪切板"];
-        };
-    }
-    
     if (!_exportCell) {
         _exportCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-        _exportCell.frame = CGRectMake(0, _pasteCell.bottom + 1, WIDTHFC, 64);
-        _exportCell.textLabel.text = @"导出数据库开关";
+        _exportCell.frame = CGRectMake(0, _silenceCell.bottom + 1, WIDTHFC, 64);
+        _exportCell.textLabel.text = @"导出数据库弹窗";
         _exportCell.backgroundColor = UIColor.whiteColor;
         [self.scrollView addSubview:_exportCell];
         _exportCell.block = ^(FSTapCell *bCell) {
@@ -185,19 +162,28 @@
         self-> _exportSwitch.on = !exportFile;
     });
     
-//    UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, WIDTHFC, 50)];
-//    versionLabel.textAlignment = NSTextAlignmentCenter;
-//    versionLabel.font = [UIFont systemFontOfSize:14];
-//    versionLabel.textColor = [UIColor lightGrayColor];
-//    NSString *what = nil;
-//#if DEBUG
-//    what = @"Debug";
-//#else
-//    what = @"Release";
-//#endif
-//    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-//    versionLabel.text = [[NSString alloc] initWithFormat:@"%@ %@(%@)",what,[FSKit appVersionNumber],build];
-//    tableView.tableFooterView = versionLabel;
+    if (!_aboutCell) {
+        _aboutCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+        _aboutCell.frame = CGRectMake(0, _exportCell.bottom + 1, WIDTHFC, 64);
+        _aboutCell.textLabel.text = @"关于念华";
+        _aboutCell.backgroundColor = UIColor.whiteColor;
+        [self.scrollView addSubview:_aboutCell];
+        _aboutCell.block = ^(FSTapCell *bCell) {
+            [FSKit pushToViewControllerWithClass:@"ARAboutController" navigationController:this.navigationController param:@{@"title":@"关于念华"} configBlock:nil];
+        };
+    }
+    
+    if (!_pasteCell) {
+        _pasteCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+        _pasteCell.frame = CGRectMake(0, _aboutCell.bottom + 1, WIDTHFC, 64);
+        _pasteCell.textLabel.text = @"清空剪切板";
+        _pasteCell.backgroundColor = UIColor.whiteColor;
+        [self.scrollView addSubview:_pasteCell];
+        _pasteCell.block = ^(FSTapCell *bCell) {
+            [FSKit copyToPasteboard:@""];
+            [FSToast show:@"清空剪切板"];
+        };
+    }    
 }
 
 - (void)changeTTSSwitch {
