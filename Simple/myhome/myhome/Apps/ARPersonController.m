@@ -31,11 +31,13 @@
 @property (nonatomic,strong) FSTapCell      *silenceCell;
 @property (nonatomic,strong) FSTapCell      *clearCell;
 @property (nonatomic,strong) FSTapCell      *pasteCell;
+@property (nonatomic,strong) FSTapCell      *exportCell;
 
 @end
 
 @implementation ARPersonController {
-    UISwitch    *_switch;
+    UISwitch    *_ttsSwitch;
+    UISwitch    *_exportSwitch;
 }
 
 - (void)viewDidLoad {
@@ -118,33 +120,31 @@
         NSString *ttsSwitch = [FSAppConfig objectForKey:_appCfg_ttsSwitch];
         ttsClose = [ttsSwitch boolValue];
     }, ^{
-        if (!self->_switch) {
-            self->_switch = [[UISwitch alloc] initWithFrame:CGRectMake(WIDTHFC - 61, 16.5, 51, 31)];
-            [self->_switch addTarget:self action:@selector(changeTTSSwitch) forControlEvents:UIControlEventValueChanged];
-            [self->_silenceCell addSubview:self->_switch];
+        if (!self->_ttsSwitch) {
+            self->_ttsSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(WIDTHFC - 61, 16.5, 51, 31)];
+            [self->_ttsSwitch addTarget:self action:@selector(changeTTSSwitch) forControlEvents:UIControlEventValueChanged];
+            [self->_silenceCell addSubview:self->_ttsSwitch];
         }
-        self-> _switch.on = ttsClose;
+        self-> _ttsSwitch.on = ttsClose;
     });
     
-    __block NSString *cache = nil;
+    if (!self->_clearCell) {
+        self->_clearCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+        self->_clearCell.frame = CGRectMake(0, self->_silenceCell.bottom + 1, WIDTHFC, 64);
+        self->_clearCell.textLabel.text = @"清除缓存";
+        self->_clearCell.detailTextLabel.font = [UIFont systemFontOfSize:13];
+        self->_clearCell.backgroundColor = UIColor.whiteColor;
+        [self.scrollView addSubview:self->_clearCell];
+        self->_clearCell.block = ^(FSTapCell *bCell) {
+            [this clearCache];
+        };
+    }
+    
     _fs_dispatch_global_queue_sync(^{
         [FSCacheManager allCacheSize:^(NSUInteger bResult) {
-            cache = _fs_KMGUnit(bResult);
-            
+            NSString *cache = _fs_KMGUnit(bResult);
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (!self->_clearCell) {
-                    self->_clearCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
-                    self->_clearCell.frame = CGRectMake(0, self->_silenceCell.bottom + 1, WIDTHFC, 64);
-                    self->_clearCell.textLabel.text = @"清除缓存";
-                    self->_clearCell.detailTextLabel.text = cache;
-                    self->_clearCell.detailTextLabel.font = [UIFont systemFontOfSize:13];
-                    self->_clearCell.backgroundColor = UIColor.whiteColor;
-                    [self.scrollView addSubview:self->_clearCell];
-                    self->_clearCell.block = ^(FSTapCell *bCell) {
-                        [this clearCache];
-                    };
-                }
-                self->_pasteCell.top = self->_clearCell.bottom + 1;
+                self->_clearCell.detailTextLabel.text = cache;
             });
         }];
     });
@@ -160,6 +160,30 @@
             [FSToast show:@"清空剪切板"];
         };
     }
+    
+    if (!_exportCell) {
+        _exportCell = [[FSTapCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
+        _exportCell.frame = CGRectMake(0, _pasteCell.bottom + 1, WIDTHFC, 64);
+        _exportCell.textLabel.text = @"导出数据库开关";
+        _exportCell.backgroundColor = UIColor.whiteColor;
+        [self.scrollView addSubview:_exportCell];
+        _exportCell.block = ^(FSTapCell *bCell) {
+            [this changeExportSwitch];
+        };
+    }
+    
+    __block BOOL exportFile = NO;
+    _fs_dispatch_global_main_queue_async(^{
+        NSString *eSwitch = [FSAppConfig objectForKey:_appCfg_exportSwitch];
+        exportFile = [eSwitch boolValue];
+    }, ^{
+        if (!self->_exportSwitch) {
+            self->_exportSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(WIDTHFC - 61, 16.5, 51, 31)];
+            [self->_exportSwitch addTarget:self action:@selector(changeExportSwitch) forControlEvents:UIControlEventValueChanged];
+            [self->_exportCell addSubview:self->_exportSwitch];
+        }
+        self-> _exportSwitch.on = !exportFile;
+    });
     
 //    UILabel *versionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, WIDTHFC, 50)];
 //    versionLabel.textAlignment = NSTextAlignmentCenter;
@@ -180,6 +204,13 @@
     BOOL fp = [[FSAppConfig objectForKey:_appCfg_ttsSwitch] boolValue];
     NSNumber *num = @(!fp);
     [FSAppConfig saveObject:num.stringValue forKey:_appCfg_ttsSwitch];
+    [self personHandleDatas];
+}
+
+- (void)changeExportSwitch {
+    BOOL fp = [[FSAppConfig objectForKey:_appCfg_exportSwitch] boolValue];
+    NSNumber *num = @(!fp);
+    [FSAppConfig saveObject:num.stringValue forKey:_appCfg_exportSwitch];
     [self personHandleDatas];
 }
 

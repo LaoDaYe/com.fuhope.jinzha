@@ -54,6 +54,8 @@
 #import "FSApp.h"
 #import "FSJZStartPageView.h"
 #import "FSWebKitController.h"
+#import <MessageUI/MessageUI.h>
+
 //#import "FSEmptyView.h"
 
 @interface HAToolController ()
@@ -163,7 +165,16 @@
     
     if (_shouldOutput) {
         _shouldOutput = NO;
-        [self exportFile];
+        
+        __block BOOL notExport = NO;
+        _fs_dispatch_global_main_queue_async(^{
+            NSString *eSwitch = [FSAppConfig objectForKey:_appCfg_exportSwitch];
+            notExport = [eSwitch boolValue];
+        }, ^{
+            if (notExport == NO) {
+                [self exportFile];
+            }
+        });
     }
 }
 
@@ -307,14 +318,14 @@
 }
 
 - (void)nearbyAction{
-    BOOL wifi = FSKitDuty.isWiFiEnabled;
-    if (!wifi) {
-        [FSUIKit showAlertWithMessage:@"请打开手机WIFI功能" controller:self];
-        return;
-    }
+//    BOOL wifi = FSKitDuty.isWiFiEnabled;
+//    if (!wifi) {
+//        [FSUIKit showAlertWithMessage:@"请打开手机WIFI功能" controller:self];
+//        return;
+//    }
     
-    NSString *send = @"转移数据库";
-    NSString *rece = @"接收数据库";
+    NSString *send = @"我是发送方";
+    NSString *rece = @"我是接收方";
     NSNumber *type = @(UIAlertActionStyleDefault);
     [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[send,rece] styles:@[type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:send]) {
@@ -355,7 +366,7 @@
     self.navigationItem.leftBarButtonItem = nearby;
     
     self.title = FSKit.appName;
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"文件" style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithTitle:@"数据库" style:UIBarButtonItemStylePlain target:self action:@selector(bbiAction)];
     self.navigationItem.rightBarButtonItem = bbi;
     
     _boardView = [[FSBoardView alloc] initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 0)];
@@ -570,12 +581,12 @@
     //        return;
     //    }
     
-    NSString *transfer = @"转移";
-    NSString *all = @"数据库";
-    NSString *file = @"文件";
+    NSString *transfer = @"转给其他手机";
+    NSString *all = @"转给其他应用";
+    NSString *file = @"导出文件";
 
     NSNumber *type = @(UIAlertActionStyleDefault);
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"导出文件" message:@"把数据导出到安全的渠道，注意防止泄露" actionTitles:@[transfer,all,file] styles:@[type,type,type] handler:^(UIAlertAction *action) {
+    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:@"您可将数据库转移到其他渠道" actionTitles:@[transfer,all,file] styles:@[type,type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:transfer]) {
             [self nearbyAction];
         }else if ([action.title isEqualToString:all]){
@@ -609,12 +620,12 @@
 
 - (void)exportSQLite3{
     NSString *system = @"其他应用打开";
-    NSString *wechat = @"微信";
-    NSString *email = @"邮件";
+    NSString *wechat = @"发到微信";
+    NSString *email = @"发到邮箱";
     
     NSArray *titles = @[system,wechat,email];
     NSNumber *type = @(UIAlertActionStyleDefault);
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"导出数据" message:nil actionTitles:titles styles:@[type,type,type,type] handler:^(UIAlertAction *action) {
+    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:@"导出数据库" message:nil actionTitles:titles styles:@[type,type,type] handler:^(UIAlertAction *action) {
         if ([action.title isEqualToString:wechat]) {
             [self shareToWechat];
         }else if ([action.title isEqualToString:email]){
@@ -625,19 +636,12 @@
     }];
 }
 
-- (void)confirmSendEmail{
-    NSString *system = @"其他应用打开";
-    NSString *email = @"邮件";
-    [FSUIKit alert:UIAlertControllerStyleActionSheet controller:self title:nil message:nil actionTitles:@[system,email] styles:@[@(UIAlertActionStyleDefault),@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
-        if ([action.title isEqualToString:system]) {
-            [self exportFile];
-        }else{
-            [self sendEmail];
-        }
-    }];
-}
-
 - (void)sendEmail{
+    BOOL canSendMail = [MFMailComposeViewController canSendMail];
+    if (!canSendMail) {
+        [FSToast show:@"手机设置邮箱后才可以反馈信息"];
+        return;
+    }
     NSString *path = [FSDBMaster dbPath];
     NSFileManager *manager = [NSFileManager defaultManager];
     if (![manager fileExistsAtPath:path]){
@@ -685,6 +689,9 @@
         webController.urlString = @"https://m.baidu.com";
         [self.navigationController pushViewController:webController animated:YES];
 #endif
+    } else if (type == FSActionTypeQRCode) {
+//            [self QRAction];
+        [FSKit pushToViewControllerWithClass:@"FSAES256Controller" navigationController:self.navigationController param:nil configBlock:nil];
     } else{
         [FSUseGestureView verify:self.tabBarController.view password:FSCryptorSupport.localUserDefaultsCorePassword success:^(FSUseGestureView *view) {
             [self actionForTypeExec:t type:type];
@@ -694,10 +701,6 @@
 
 - (void)actionForTypeExec:(Tuple3 *)t type:(NSInteger)actionType{
     switch (actionType) {
-        case FSActionTypeQRCode:{
-//            [self QRAction];
-            [FSKit pushToViewControllerWithClass:@"FSAES256Controller" navigationController:self.navigationController param:nil configBlock:nil];
-        }break;
         case FSActionTypeLoanCounter:{
             [self pushToCounter];
         }break;
