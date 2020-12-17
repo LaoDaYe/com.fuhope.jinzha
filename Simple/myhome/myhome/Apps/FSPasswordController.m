@@ -48,11 +48,11 @@ static NSString  *_Chinese_placeholder = @"人生若只如初见";
     NSString *place = nil;
     NSString *btnTitle = nil;
     if (imported) {
-        origin = @"你从外面导入了一个数据库，数据库中已经保留了你原来设置的‘核心密码’，请输入该密码来校验通过。";
+        origin = @"你从外面导入了一个数据库，数据库中已经保留了你原来设置的‘核心密码’的校验码，请输入该密码来校验对比。";
         place = @"原来设置的'核心密码'";
         btnTitle = @"校验";
     }else{
-        origin = @"唯一需要记住的密码，忘了就找不回了，可以是任意文字。你的数据被它加密以保护安全。设置后不能再更改。\n\t当忘记手势密码等时可以用它解锁。\n\n务必牢记两个原则:\n\t一，不要忘记 核心密码\n\t二，不要忘记原则一";
+        origin = @"唯一需要记住的密码，忘了就找不回了，可以是任意文字。你的数据被它加密以保护安全。设置后可以再更改。\n\t当忘记手势密码等时可以用它解锁。\n\n务必牢记两个原则:\n\t一，不要忘记 核心密码\n\t二，不要忘记原则一";
         place = [[NSString alloc] initWithFormat:@"如'%@'，‘%@’",_English_placeholder,_Chinese_placeholder];
         btnTitle = @"设置";
     }

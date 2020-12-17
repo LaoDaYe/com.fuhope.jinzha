@@ -285,7 +285,6 @@
 "No save" = "不保存";
 "Now this group" = "已是此组";
 "Change to" = "确定换到";
-"Core password" = "核心密码";
 "Core password description" = "唯一需要记住的密码，忘了就找不回了，可以是任意文字。你的数据被它加密以保护安全。设置后不能再更改。\n\t当忘记手势密码等时可以用它解锁。\n\n务必牢记两个原则:\n\t一，不要忘记 核心密码\n\t二，不要忘记原则一";
 "For data security, character length at least 3 or above!" = "为了数据安全，字符长度至少3位或以上!";
 "This password is not recommended" = "这个密码不建议使用";
