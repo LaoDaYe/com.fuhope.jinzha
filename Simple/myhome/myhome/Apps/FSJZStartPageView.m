@@ -76,8 +76,10 @@
             _tip = @"念华，中午好 ~";
         } else if (time.hour >= 14 && time.hour <= 18) {
             _tip = @"念华，下午好 ~";
-        } else {
+        } else if (time.hour > 18 && time.hour < 21) {
             _tip = @"念华，晚上好 ~";
+        } else {
+            _tip = @"念华，你好呐 ~";
         }
     }
 }
