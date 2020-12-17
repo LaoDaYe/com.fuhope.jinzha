@@ -48,7 +48,6 @@
 #import "FSUseGestureView+Factory.h"
 #import "FSKeyValueCryptor.h"
 #import "FSBoardView.h"
-#import "FSCloundView.h"
 #import "UIView+Tap.h"
 #import "FSRouter.h"
 #import "FSPwdModel.h"
@@ -361,7 +360,6 @@
     
     _boardView = [[FSBoardView alloc] initWithFrame:CGRectMake(0, 40, self.view.frame.size.width, 0)];
     [self.scrollView addSubview:_boardView];
-    [self systemBoardView];
     [self showTimeLabel];
     _fs_dispatch_main_queue_async(^{
         [self poet];        
@@ -397,63 +395,7 @@
     return weeks[week];
 }
 
-// 滑到屏幕上半部分就消失
-static NSString *_cloundKey = @"_fullpage_set_clound_key";
-- (void)systemBoardView{
-    BOOL fp = [[FSAppConfig objectForKey:_cloundKey] boolValue];
-    if (!fp) {
-        return;
-    }
-
-    FSCloundView *v = [[FSCloundView alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height - 44 - 49 - 10, 44, 44)];
-    v.backgroundColor = UIColor.whiteColor;
-    v.layer.cornerRadius = 22;
-    v.layer.borderColor = FS_GreenColor.CGColor;
-    v.layer.borderWidth = .5;
-    [self.tabBarController.view addSubview:v];
-    [v _fs_tapClick:^(UIView *view, NSInteger taps) {
-        if (taps == 1) {
-            [self tapClick];
-        }else if (taps == 2){
-            [view removeFromSuperview];
-        }
-    }];
-}
-
-static NSInteger _bakcTag = 888;
-static NSInteger _boardTag = 889;
-- (void)tapClick{
-    self.tabBarController.selectedIndex = 0;
-    
-    UIView *back = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, UIScreen.mainScreen.bounds.size.height)];
-    back.backgroundColor = UIColor.blackColor;
-    back.alpha = .6;
-    back.tag = _bakcTag;
-    [self.tabBarController.view addSubview:back];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeTabBarSubViews)];
-    [back addGestureRecognizer:tap];
-    
-    FSBoardView *b = [[FSBoardView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, 0)];
-    b.backgroundColor = UIColor.whiteColor;
-    [self.tabBarController.view addSubview:b];
-    b.tag = _boardTag;
-    b.layer.cornerRadius = 6;
-    b.frame = CGRectMake(10, self.view.frame.size.height / 2 - b.frame.size.height / 2, b.frame.size.width, b.frame.size.height);
-}
-
-- (void)removeTabBarSubViews{
-    UIView *back = [self.tabBarController.view viewWithTag:_bakcTag];
-    UIView *b = [self.tabBarController.view viewWithTag:_boardTag];
-    while (back || b) {
-        [back removeFromSuperview];
-        [b removeFromSuperview];
-        back = [self.tabBarController.view viewWithTag:_bakcTag];
-        b = [self.tabBarController.view viewWithTag:_boardTag];
-    }
-}
-
 - (void)boardViewNotification:(NSNotification *)notification{
-    [self removeTabBarSubViews];
     Tuple3 *t = notification.object;
     [self actionForType:t];
 }
@@ -1014,40 +956,40 @@ static NSInteger _boardTag = 889;
     [self.navigationController pushViewController:pwd animated:YES];
 }
 
-- (void)monthTipsToAppStoreToGrade{
-    __block BOOL _need_show = NO;
-    _fs_dispatch_global_main_queue_async(^{
-        NSDate *today = [NSDate date];
-        NSDateComponents *c = [FSDate componentForDate:today];
-        if (c.day == 26) {
-            NSString *key = NSStringFromSelector(_cmd);
-            
-            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-            NSString *s = [ud objectForKey:key];
-            NSTimeInterval t = [s doubleValue];
-            NSDate *latest = [[NSDate alloc] initWithTimeIntervalSince1970:t];
-            NSDateComponents *ct = [FSDate componentForDate:latest];
-            if (ct.month == c.month) {
-                return;
-            }
-            [ud setObject:@([today timeIntervalSince1970]).stringValue forKey:key];
-            [ud synchronize];
-            _need_show = YES;
-        }
-    }, ^{
-        if (_need_show) {
-            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:nil message:@"欢迎评分" actionTitles:@[@"评论"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
-                NSString *urlStr = @"itms-apps://itunes.apple.com/app/id1291692536";
-                UIApplication *app = [UIApplication sharedApplication];
-                NSURL *url = [NSURL URLWithString:urlStr];
-                if ([app canOpenURL:url]) {
-                    [app openURL:url];
-                    [FSTrack event:_UMeng_Event_cent_home];
-                }
-            } cancelTitle:@"下次再说" cancel:nil completion:nil];
-        }
-    });
-}
+//- (void)monthTipsToAppStoreToGrade{
+//    __block BOOL _need_show = NO;
+//    _fs_dispatch_global_main_queue_async(^{
+//        NSDate *today = [NSDate date];
+//        NSDateComponents *c = [FSDate componentForDate:today];
+//        if (c.day == 26) {
+//            NSString *key = NSStringFromSelector(_cmd);
+//            
+//            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+//            NSString *s = [ud objectForKey:key];
+//            NSTimeInterval t = [s doubleValue];
+//            NSDate *latest = [[NSDate alloc] initWithTimeIntervalSince1970:t];
+//            NSDateComponents *ct = [FSDate componentForDate:latest];
+//            if (ct.month == c.month) {
+//                return;
+//            }
+//            [ud setObject:@([today timeIntervalSince1970]).stringValue forKey:key];
+//            [ud synchronize];
+//            _need_show = YES;
+//        }
+//    }, ^{
+//        if (_need_show) {
+//            [FSUIKit alert:UIAlertControllerStyleAlert controller:self title:nil message:@"欢迎评分" actionTitles:@[@"评论"] styles:@[@(UIAlertActionStyleDefault)] handler:^(UIAlertAction *action) {
+//                NSString *urlStr = @"itms-apps://itunes.apple.com/app/id1291692536";
+//                UIApplication *app = [UIApplication sharedApplication];
+//                NSURL *url = [NSURL URLWithString:urlStr];
+//                if ([app canOpenURL:url]) {
+//                    [app openURL:url];
+//                    [FSTrack event:_UMeng_Event_cent_home];
+//                }
+//            } cancelTitle:@"下次再说" cancel:nil completion:nil];
+//        }
+//    });
+//}
 
 - (void)exportFile{
     NSString *filePath = [FSDBMaster dbPath];
